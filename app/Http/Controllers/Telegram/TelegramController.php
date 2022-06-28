@@ -70,7 +70,7 @@ class TelegramController extends Controller
         $array = collect($this->keyborads)->where('parent_text', $row['callback_data'])->all();
         $replyMarkup = $row['children_type'] == 'keyboard' ? $this->convertKeyboards($array) : ($row['children_type'] == 'inline_keyboard' ? $this->convertInlineKeyboards($array) : null);
     
-        $text = "jamallll";// $row['details'] ?? json_decode($row);//$json;//
+        $text = $row['details'] ?? json_decode($row);//$json;//
 
         $this->sendMessage($chat_id, $text, $replyMarkup );
         // $this->sendMessage($bot_id, $message);

@@ -1,0 +1,23 @@
+{
+    "update_id": 937943896,
+    "message": {
+        "message_id": 544,
+        "from": {
+            "id": 926406689,
+            "is_bot": false,
+            "first_name": "\u062c",
+            "last_name": "\u0632\u0627\u0631\u0639\u06cc",
+            "username": "jzcs89",
+            "language_code": "en"
+        },
+        "chat": {
+            "id": 926406689,
+            "first_name": "\u062c",
+            "last_name": "\u0632\u0627\u0631\u0639\u06cc",
+            "username": "jzcs89",
+            "type": "private"
+        },
+        "date": 1656444205,
+        "text": "\u067e\u0631\u0648\u0641\u0627\u06cc\u0644"
+    }
+}
