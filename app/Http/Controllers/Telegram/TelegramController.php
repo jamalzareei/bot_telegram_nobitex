@@ -12,26 +12,36 @@ class TelegramController extends Controller
     protected $token = "5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4";
     protected $baseUrl = "https://telegram.shixeh.com/telegram";
     protected $keyborads = [
-        ["text" => "/start", "parent_text" => "", "type" => "text", "url" => "", "callback_data" => "/start", "children_type"=> "keyboard", "details"=> "به ربات خوش آمدید"],
+        ["text" => "", "parent_text" => "", "type" => "text", "url" => "", "callback_data" => "", "children_type" => "keyboard", "details" => "لطفا اطلاعات خود را به درستی وارد نمایید"],
+        ["text" => "/start", "parent_text" => "", "type" => "text", "url" => "", "callback_data" => "/start", "children_type" => "keyboard", "details" => "به ربات خوش آمدید"],
 
-        ["text" => "پروفایل", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "پروفایل", "children_type"=> "inline_keyboard", "details"=> "ویرایش اطلاعات پروفایل"],
-        ["text" => "خرید", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "خرید", "children_type"=> "inline_keyboard", "details"=> "خرید ارز:"],
-        ["text" => "فروش", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "فروش", "children_type"=> "inline_keyboard", "details"=> "فروش ارز:"],
-        ["text" => "راهنمای", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "راهنمای", "children_type"=> "inline_keyboard", "details"=> "راهنمای کاربر"],
-        ["text" => "سوالات متداول", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "سوالات متداول", "children_type"=> "inline_keyboard", "details"=> "سوالات متداول کاربر"],
+        ["text" => "پروفایل", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "پروفایل", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
+        ["text" => "خرید", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "خرید", "children_type" => "inline_keyboard", "details" => "خرید ارز:"],
+        ["text" => "فروش", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "فروش", "children_type" => "inline_keyboard", "details" => "فروش ارز:"],
+        ["text" => "راهنمای", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "راهنمای", "children_type" => "inline_keyboard", "details" => "راهنمای کاربر"],
+        ["text" => "سوالات متداول", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "سوالات متداول", "children_type" => "inline_keyboard", "details" => "سوالات متداول کاربر"],
 
-        ["text" => "شماره تماس", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "phone_number", "children_type"=> "text", "details"=> "شماره تلفن خود را وارد نمایید"],
-        ["text" => "عکس پروفایل", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "photo_user", "children_type"=> "text", "details"=> "عکس خود را ارسال نمایید"],
-        ["text" => "کد ملی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "ssn", "children_type"=> "text", "details"=> "کد ملی خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "/start", "children_type"=> "text", "details"=> "برگشت به منوی اصلی"],
-        ["text" => "بیت کوین", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_bitcoin", "children_type"=> "text", "details"=> "مقدار فروش بیت کوین خود را وارد نمایید"],
-        ["text" => "تتر", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_teter", "children_type"=> "text", "details"=> "مقدار فروش تتر خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "/start", "children_type"=> "text", "details"=> "برگشت به منوی اصلی"],
-        ["text" => "تتر", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_teter", "children_type"=> "text", "details"=> "مقدار خرید تتر خود را وارد نمایید"],
-        ["text" => "بیت کوین", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_bitcoin", "children_type"=> "text", "details"=> "مقدار خرید بیت کوین خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "/start", "children_type"=> "text", "details"=> "برگشت به منوی اصلی"],
-        ["text" => "راهنمای", "parent_text" => "راهنمای", "type" => "inline_keyboard", "url" => "https://google.com", "children_type"=> "text", "details"=> "برگشت به منوی اصلی"],
-        ["text" => "سوالات متداول", "parent_text" => "سوالات متداول", "type" => "inline_keyboard", "url" => "https://google.com", "children_type"=> "text", "details"=> "برگشت به منوی اصلی"],
+        ["text" => "نام", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "firstname", "children_type" => "text", "details" => "نام خود را وارد نمایید"],
+        ["text" => "نام خانوادگی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "lastname", "children_type" => "text", "details" => "نام خانوادگی خود را وارد نمایید"],
+        ["text" => "شماره تماس", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "phone_number", "children_type" => "text", "details" => "شماره تلفن خود را وارد نمایید"],
+        ["text" => "عکس پروفایل", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "photo_user", "children_type" => "text", "details" => "عکس خود را ارسال نمایید"],
+        ["text" => "کد ملی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "ssn", "children_type" => "text", "details" => "کد ملی خود را وارد نمایید"],
+        ["text" => "بازگشت", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
+        ["text" => "بیت کوین", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_bitcoin", "children_type" => "text", "details" => "مقدار فروش بیت کوین خود را وارد نمایید"],
+        ["text" => "تتر", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_teter", "children_type" => "text", "details" => "مقدار فروش تتر خود را وارد نمایید"],
+        ["text" => "بازگشت", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
+        ["text" => "تتر", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_teter", "children_type" => "text", "details" => "مقدار خرید تتر خود را وارد نمایید"],
+        ["text" => "بیت کوین", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_bitcoin", "children_type" => "text", "details" => "مقدار خرید بیت کوین خود را وارد نمایید"],
+        ["text" => "بازگشت", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
+        ["text" => "راهنمای", "parent_text" => "راهنمای", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
+        ["text" => "سوالات متداول", "parent_text" => "سوالات متداول", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
+
+
+        ["text" => "firstname", "parent_text" => "firstname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام:"],
+        ["text" => "lastname", "parent_text" => "lastname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام خانوادگی:"],
+        ["text" => "ssn", "parent_text" => "ssn", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "کد ملی خود را وارد نمایید:"],
+        ["text" => "phone_number", "parent_text" => "phone_number", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "شماره تماس:"],
+        ["text" => "photo_user", "parent_text" => "photo_user", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "عکس پروفایل خود را ارسال نمایید:"],
     ];
     // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/getUpdates
     // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/deleteWebHook?url=
@@ -58,21 +68,21 @@ class TelegramController extends Controller
         $chanel_id = -1001697519941;
         $bot_id = 926406689;
 
-        $message = $update['message']['text'] ?? 'NOT';
+        $message = $update['message']['text'] ?? $update['callback_query']['data'] ?? 'NOT';
         $chat_id = $update['message']['chat']['id'] ?? $bot_id;
         // $this->sendMessage($chat_id, $json);
 
         $row = collect($this->keyborads)->where('text', $message)->first();
         $replyMarkup = null;
-        if(!($row && count($row) > 0)){
+        if (!($row && count($row) > 0)) {
             $row = collect($this->keyborads)->first();
         }
         $array = collect($this->keyborads)->where('parent_text', $row['callback_data'])->all();
         $replyMarkup = $row['children_type'] == 'keyboard' ? $this->convertKeyboards($array) : ($row['children_type'] == 'inline_keyboard' ? $this->convertInlineKeyboards($array) : null);
-    
-        $text = $row['details'] ?? json_decode($row);//$json;//
 
-        $this->sendMessage($chat_id, $text, $replyMarkup );
+        $text = $row['details'] ?? json_encode($row);//$json;//
+
+        $this->sendMessage($chat_id, $text, $replyMarkup);
         // $this->sendMessage($bot_id, $message);
         // $this->sendMessage($group_id, $message);
         // $this->sendMessage($chanel_id, $message);
@@ -81,35 +91,17 @@ class TelegramController extends Controller
 
     public function convertInlineKeyboards($arrayInlineKeyboards)
     {
-        //[ "text" => "بازگشت", "parent_text" => "فروش", "type" => "inline_keyboard", "url" => "","callback_data" => "back" ],
-        
-        $list = [];
-        foreach ($arrayInlineKeyboards as $res){
-            array_push($list, [ $res ]);
-        }
-        return json_encode(
-            [
-                'inline_keyboard' => [
-                    array_values($arrayInlineKeyboards)
-                    // array_merge($arrayInlineKeyboards)
-                ]
-            ]
-        );
+        return  json_encode([
+            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards),3)
+        ]);
     }
 
 
     public function convertKeyboards($arrayInlineKeyboards)
     {
-        //[ "text" => "بازگشت", "parent_text" => "فروش", "type" => "inline_keyboard", "url" => "","callback_data" => "back" ],
-
-        $list = [];
-        foreach ($arrayInlineKeyboards as $res){
-            array_push($list, [ $res ]);
-        }
         return json_encode([
-            "keyboard" => $list,"resize_keyboard" => true//,"one_time_keyboard" => false
+            "keyboard" => array_chunk($arrayInlineKeyboards, 2), "resize_keyboard" => true //,"one_time_keyboard" => false
         ]);
-
     }
 
     public function setWebHook()

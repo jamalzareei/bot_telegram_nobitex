@@ -17,12 +17,13 @@ class CreateUsersTable extends Migration
             $table->id();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
-            $table->string('chate_id')->unique(); // 0098...
+            $table->string('chate_id')->unique(); // telegram chat id...
             $table->string('email')->nullable();
             $table->string('phone')->unique(); // 0098...
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
+            $table->timestamp('birth_date')->nullable();
             $table->string('balance')->default(0);
             $table->string('code_confirm')->nullable();
             $table->string('document_id')->nullable(); // photo user
