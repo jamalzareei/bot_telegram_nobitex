@@ -21,7 +21,7 @@ class TelegramController extends Controller
         ["text" => "راهنمای", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "راهنمای", "children_type" => "inline_keyboard", "details" => "راهنمای کاربر"],
         ["text" => "سوالات متداول", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "سوالات متداول", "children_type" => "inline_keyboard", "details" => "سوالات متداول کاربر"],
 
-        ["text" => "نام", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "firstname", "children_type" => "text", "details" => "نام خود را وارد نمایید"],
+        ["text" => "نام", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "firstname", "children_type" => "keyboard", "details" => "نام خود را وارد نمایید"],
         ["text" => "نام خانوادگی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "lastname", "children_type" => "text", "details" => "نام خانوادگی خود را وارد نمایید"],
         ["text" => "شماره تماس", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "phone_number", "children_type" => "text", "details" => "شماره تلفن خود را وارد نمایید"],
         ["text" => "عکس پروفایل", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "photo_user", "children_type" => "text", "details" => "عکس خود را ارسال نمایید"],
@@ -36,7 +36,9 @@ class TelegramController extends Controller
         ["text" => "راهنمای", "parent_text" => "راهنمای", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
         ["text" => "سوالات متداول", "parent_text" => "سوالات متداول", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
 
-
+        ["text" => "خانوادگی", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "خانوادگی", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
+        ["text" => "انصراف", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "پروفایل", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
+        
         ["text" => "firstname", "parent_text" => "firstname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام:"],
         ["text" => "lastname", "parent_text" => "lastname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام خانوادگی:"],
         ["text" => "ssn", "parent_text" => "ssn", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "کد ملی خود را وارد نمایید:"],
@@ -72,13 +74,14 @@ class TelegramController extends Controller
         $chat_id = $update['message']['chat']['id'] ?? $bot_id;
         // $this->sendMessage($chat_id, $json);
 
-        $row = collect($this->keyborads)->where('text', $message)->first();
+        $row = collect($this->keyborads)->where('callback_data', $message)->first();
         $replyMarkup = null;
-        if (!($row && count($row) > 0)) {
-            $row = collect($this->keyborads)->first();
+        if (($row && count($row) > 0)) {
+            $array = collect($this->keyborads)->where('parent_text', $row['callback_data'])->all();
+            $replyMarkup = $row['children_type'] == 'keyboard' ? $this->convertKeyboards($array) : ($row['children_type'] == 'inline_keyboard' ? $this->convertInlineKeyboards($array) : null);
+        }else{
+            $row = $json;//collect($this->keyborads)->first();
         }
-        $array = collect($this->keyborads)->where('parent_text', $row['callback_data'])->all();
-        $replyMarkup = $row['children_type'] == 'keyboard' ? $this->convertKeyboards($array) : ($row['children_type'] == 'inline_keyboard' ? $this->convertInlineKeyboards($array) : null);
 
         $text = $row['details'] ?? json_encode($row);//$json;//
 

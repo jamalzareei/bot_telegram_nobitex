@@ -19,6 +19,9 @@ class CreateDocumentsTable extends Migration
             $table->foreign('user_id')->references('id')->on('users');
 
             $table->text('path');
+            
+            $table->unsignedBigInteger('bot_id')->nullable();
+            $table->foreign('bot_id')->references('id')->on('bots');
 
             $table->timestamps();
             $table->softDeletes();
