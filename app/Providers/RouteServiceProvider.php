@@ -28,6 +28,7 @@ class RouteServiceProvider extends ServiceProvider
      */
     protected $namespace = 'App\\Http\\Controllers';
     protected $namespaceTelegram = 'App\\Http\\Controllers\\Telegram';
+    protected $namespacePanel= 'App\\Http\\Controllers\\Panel';
 
     /**
      * Define your route model bindings, pattern filters, etc.
@@ -53,6 +54,13 @@ class RouteServiceProvider extends ServiceProvider
             ->middleware('web')
             ->namespace($this->namespaceTelegram)
             ->group(base_path('routes/telegram.php'));
+
+            
+                
+            Route::prefix('panel')
+            ->middleware('web')
+            ->namespace($this->namespacePanel)
+            ->group(base_path('routes/panel.php'));
         });
     }
 
