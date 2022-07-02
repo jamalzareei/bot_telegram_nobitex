@@ -37,7 +37,7 @@ class TelegramController extends Controller
         ["text" => "سوالات متداول", "parent_text" => "سوالات متداول", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
 
         ["text" => "خانوادگی", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "خانوادگی", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
-        ["text" => "انصراف", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "پروفایل", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
+        ["text" => "انصراف", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "/start", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
         
         ["text" => "firstname", "parent_text" => "firstname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام:"],
         ["text" => "lastname", "parent_text" => "lastname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام خانوادگی:"],
@@ -109,25 +109,25 @@ class TelegramController extends Controller
 
     public function setWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot$this->token/setWebHook?url=$this->baseUrl");
+        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/setWebHook?url=".config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function deleteWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot$this->token/deleteWebHook?url=$this->baseUrl");
+        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/deleteWebHook?url=".config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function getWebHookInfo()
     {
-        $res = Http::get("https://api.telegram.org/bot$this->token/getWebHookInfo?url=$this->baseUrl");
+        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/getWebHookInfo?url=".config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function sendMessage($chatId, $text, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot$this->token/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
+        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
         return $res->json();
     }
 }

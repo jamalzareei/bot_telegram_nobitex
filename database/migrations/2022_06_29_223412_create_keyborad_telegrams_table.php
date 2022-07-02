@@ -16,8 +16,10 @@ class CreateKeyboradTelegramsTable extends Migration
         Schema::create('keyborad_telegrams', function (Blueprint $table) {
             $table->id();
             $table->string("text");
-            $table->string("parent_id")->nullable();
+            $table->bigInteger("parent_id")->nullable();
             $table->string("parent_callback_data")->nullable(); // parnet
+            $table->string("next_callback_data")->nullable(); // parnet
+            $table->bigInteger("next_id")->nullable(); // parnet
             $table->string("type")->nullable(); // text, keyboard, inline_keyboard
             $table->string("url")->nullable(); //  for btn link
             $table->string("callback_data")->nullable(); // text or callback_data (slug)
@@ -25,6 +27,7 @@ class CreateKeyboradTelegramsTable extends Migration
             $table->text("details")->nullable(); // text for show (html)
             $table->string("controller_method")->nullable(); // Path/NameController@methodName
             $table->integer("status")->nullable();
+            $table->integer("chunk_children")->nullable();
             $table->timestamps();
         });
     }
