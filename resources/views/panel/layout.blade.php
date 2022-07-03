@@ -1,4 +1,3 @@
-
 <!DOCTYPE html>
 <html class="loading" lang="en" data-textdirection="rtl">
 <!-- BEGIN: Head-->
@@ -11,12 +10,15 @@
     <meta name="keywords" content="admin template, Vuexy admin template, dashboard template, flat admin template, responsive admin template, web app">
     <meta name="author" content="PIXINVENT">
     <title>{{ $title ?? '' }}</title>
-    <link rel="apple-touch-icon" href="{{ asset('panel/app-assets/images/ico/apple-icon-120.png') }}">
-    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('panel/app-assets/images/ico/favicon.ico') }}">
+    {{-- <link rel="apple-touch-icon" href="{{ asset('panel/app-assets/images/ico/apple-icon-120.png') }}">
+    <link rel="shortcut icon" type="image/x-icon" href="{{ asset('panel/app-assets/images/ico/favicon.ico') }}"> --}}
     <link href="https://fonts.googleapis.com/css?family=Montserrat:300,400,500,600" rel="stylesheet">
 
     <!-- BEGIN: Vendor CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/vendors-rtl.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/tables/datatable/datatables.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/file-uploaders/dropzone.min.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/tables/datatable/extensions/dataTables.checkboxes.css') }}">
     <!-- END: Vendor CSS-->
 
     <!-- BEGIN: Theme CSS-->
@@ -30,9 +32,10 @@
     <!-- BEGIN: Page CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/core/menu/menu-types/vertical-menu.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/pages/authentication.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/plugins/file-uploaders/dropzone.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/pages/data-list-view.css') }}">
     <!-- END: Page CSS-->
-    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/extensions/toastr.css') }}">
+
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/custom-rtl.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/style-rtl.css') }}">
@@ -43,39 +46,80 @@
 
 <!-- BEGIN: Body-->
 
-<body class="vertical-layout vertical-menu-modern 1-column  navbar-floating footer-static bg-full-screen-image  menu-collapsed blank-page blank-page" data-open="click" data-menu="vertical-menu-modern" data-col="1-column">
+
+
+<body class="vertical-layout 2-columns navbar-floating footer-static pace-done menu-hide vertical-overlay-menu"
+    data-open="click" data-menu="vertical-menu-modern" data-col="2-columns">
+
+    @include('panel.components.header')
+
+    @include('panel.components.sidebar')
+
     <!-- BEGIN: Content-->
     <div class="app-content content">
         <div class="content-overlay"></div>
         <div class="header-navbar-shadow"></div>
         <div class="content-wrapper">
             <div class="content-header row">
+                <div class="content-header-left col-md-9 col-12 mb-2">
+                    @include('panel.components.breadcrumb')
+                </div>
             </div>
             <div class="content-body">
-                
+
                 @yield('content')
+
             </div>
         </div>
     </div>
     <!-- END: Content-->
 
+    <div class="sidenav-overlay"
+        style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+    </div>
+    <div class="drag-target"
+        style="touch-action: pan-y; user-select: none; -webkit-user-drag: none; -webkit-tap-highlight-color: rgba(0, 0, 0, 0);">
+    </div>
+
+
+    @include('panel.components.footer')
+
 
     <!-- BEGIN: Vendor JS-->
     <script src="{{ asset('panel/app-assets/vendors/js/vendors.min.js') }}"></script>
-    
+    <!-- BEGIN Vendor JS-->
+
+    <!-- BEGIN: Page Vendor JS-->
+    <script src="{{ asset('panel/app-assets/vendors/js/extensions/dropzone.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/datatables.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/datatables.buttons.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/datatables.bootstrap4.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/buttons.bootstrap.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/dataTables.select.min.js') }}"></script>
+    <script src="{{ asset('panel/app-assets/vendors/js/tables/datatable/datatables.checkboxes.min.js') }}"></script>
+    <!-- END: Page Vendor JS-->
+
+    <!-- BEGIN: Theme JS-->
     <script src="{{ asset('panel/app-assets/js/core/app-menu.js') }}"></script>
     <script src="{{ asset('panel/app-assets/js/core/app.js') }}"></script>
     <script src="{{ asset('panel/app-assets/js/scripts/components.js') }}"></script>
+    <!-- END: Theme JS-->
+
+    <!-- BEGIN: Page JS-->
+    <script src="{{ asset('panel/app-assets/js/scripts/ui/data-list-view.js') }}"></script>
+    <!-- END: Page JS-->
+    <!-- //////////////////////////////////////////////////////////// -->
 
     <script src="{{ asset('panel/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
     <script src="{{ asset('panel/app-assets/js/script.js') }}"></script>
     <script>
-        @if(session('noty'))
+        @if (session('noty'))
             messageToast("{!! session('noty')['title'] !!}", "{!! session('noty')['message'] !!}", "{!! session('noty')['status'] !!}", 5000)
-            <?php session()->forget('noty') ?>
+            <?php session()->forget('noty'); ?>
         @endif
     </script>
-    
+    <!-- END: Body-->
+
 </body>
 
 </html>

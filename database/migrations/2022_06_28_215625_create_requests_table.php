@@ -23,6 +23,7 @@ class CreateRequestsTable extends Migration
             $table->foreign('transaction_id')->references('id')->on('transactions');
 
             $table->unsignedDecimal('amount', $precision = 20, $scale = 2);
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

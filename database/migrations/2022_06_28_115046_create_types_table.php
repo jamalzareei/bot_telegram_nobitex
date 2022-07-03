@@ -18,6 +18,7 @@ class CreateTypesTable extends Migration
             $table->string('name');
             $table->string('slug')->unique();
             $table->string('model_type')->nullable();
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

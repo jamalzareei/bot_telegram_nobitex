@@ -19,6 +19,7 @@ class CreateCurrenciesTable extends Migration
             $table->string('slug');
             $table->string('price_buy');
             $table->string('price_sell');
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

@@ -22,6 +22,7 @@ class CreateAccountsTable extends Migration
             $table->unsignedBigInteger('type_id');
             $table->foreign('type_id')->references('id')->on('types');
             $table->string('number'); // IR...  or 6037...
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

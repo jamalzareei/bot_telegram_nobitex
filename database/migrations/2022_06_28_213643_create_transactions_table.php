@@ -27,6 +27,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedBigInteger('status_id');
             $table->foreign('status_id')->references('id')->on('statuses');
 
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

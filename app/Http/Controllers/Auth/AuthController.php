@@ -81,7 +81,7 @@ class AuthController extends Controller
         $admin = false;
         if(User::count() == 0){
             $admin = true;
-            Role::updateOrCreate(['name' => 'admin']);
+            Role::updateOrCreate(['name' => 'super-admin']);
         }
         $user = User::create([
             'firstname' => $request->name,
@@ -96,7 +96,8 @@ class AuthController extends Controller
         return response()->json([
             'status' => 'success',
             'title' => '',
-            'message' => 'کاربر با موفقیت ایجاد گردید.'
+            'message' => 'کاربر با موفقیت ایجاد گردید.',
+            'autoRedirect' => route('login')
         ], 200);
         // return redirect("dashboard")->withSuccess('Great! You have Successfully loggedin');
     }
@@ -112,7 +113,12 @@ class AuthController extends Controller
             return view('auth.dashboard');
         }
 
-        return redirect("login")->withSuccess('Opps! You do not have access');
+        return redirect("login")->with('noty', [
+            'title' => 'ورود به حساب کاربری',
+            'message' => 'ابتدا وارد حساب کاربری خود شوید.',
+            'status' => 'info',
+            'data' => '',
+        ]);
     }
 
 

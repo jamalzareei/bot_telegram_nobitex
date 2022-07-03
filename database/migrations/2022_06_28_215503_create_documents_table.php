@@ -23,6 +23,7 @@ class CreateDocumentsTable extends Migration
             $table->unsignedBigInteger('bot_id')->nullable();
             $table->foreign('bot_id')->references('id')->on('bots');
 
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

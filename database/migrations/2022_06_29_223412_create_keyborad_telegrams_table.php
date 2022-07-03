@@ -24,10 +24,12 @@ class CreateKeyboradTelegramsTable extends Migration
             $table->string("url")->nullable(); //  for btn link
             $table->string("callback_data")->nullable(); // text or callback_data (slug)
             $table->string("children_type")->nullable();  // text, keyboard, inline_keyboard (array)
+            $table->string("same_callback_data")->nullable();  // if this field is not null, find record same with this column
             $table->text("details")->nullable(); // text for show (html)
             $table->string("controller_method")->nullable(); // Path/NameController@methodName
             $table->integer("status")->nullable();
             $table->integer("chunk_children")->nullable();
+            $table->timestamp("actived_at")->nullable();
             $table->timestamps();
         });
     }
