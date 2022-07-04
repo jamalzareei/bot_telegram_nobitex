@@ -41,6 +41,8 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/style-rtl.css') }}">
     <!-- END: Custom CSS-->
 
+    @yield('head')
+    @yield('css')
 </head>
 <!-- END: Head-->
 
@@ -111,6 +113,10 @@
     <!-- //////////////////////////////////////////////////////////// -->
 
     <script src="{{ asset('panel/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
+
+    
+    @yield('js')
+
     <script src="{{ asset('panel/app-assets/js/script.js') }}"></script>
     <script>
         @if (session('noty'))
@@ -119,6 +125,7 @@
         @endif
     </script>
     <!-- END: Body-->
+
 
 </body>
 

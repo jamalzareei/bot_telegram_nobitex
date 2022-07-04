@@ -13,6 +13,7 @@ Route::get('/', function () {
 Route::group(['middleware' => ['role:super-admin']], function () {
     //
     Route::get('/telegram/routes', [TelegramController::class, 'routes'])->name('panel.telegram.routes');
+    Route::post('/telegram/routes/add', [TelegramController::class, 'addRoute'])->name('panel.telegram.add.route');
 
     
 });
