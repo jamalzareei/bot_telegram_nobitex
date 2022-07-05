@@ -17,10 +17,10 @@ use Illuminate\Support\Facades\Route;
 
 Route::get('/', [AuthController::class, 'dashboard'])->name('main'); 
 
-Route::get('/migrate-fresh', function () {
-    Artisan::call('migrate:fresh');
-    return 'migrate-fresh';
-});
+// Route::get('/migrate-fresh', function () {
+//     Artisan::call('migrate:fresh');
+//     return 'migrate-fresh';
+// });
 Route::get('/migrate', function () {
     Artisan::call('migrate');
     return 'migrate';
