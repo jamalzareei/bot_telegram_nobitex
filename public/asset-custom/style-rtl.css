@@ -60,3 +60,39 @@ ul#main-menu-navigation::-webkit-scrollbar-thumb:hover {
 ul#main-menu-navigation::-webkit-scrollbar-button {
     display: none
 }
+
+.data-list-view-header .add-new-data-sidebar .edit-old-data,
+.data-thumb-view-header .add-new-data-sidebar .edit-old-data {
+    width: 28.57rem;
+    max-width: 90vw;
+    height: 100vh;
+    height: calc(var(--vh, 1vh) * 100);
+    background: #FFFFFF;
+    position: fixed;
+    right: auto;
+    left: 0;
+    top: 0;
+    z-index: 1033;
+    box-shadow: 0 0 15px 0 rgb(0 0 0 / 5%);
+    -webkit-transform: translateX(-100%);
+    -ms-transform: translateX(-100%);
+    transform: translateX(-100%);
+    -webkit-transition: all 0.25s ease;
+    transition: all 0.25s ease;
+    overflow: hidden;
+}
+
+.data-list-view-header .add-new-data-sidebar .edit-old-data.show,
+.data-thumb-view-header .add-new-data-sidebar .edit-old-data.show {
+    -webkit-transform: translateX(0%);
+    -ms-transform: translateX(0%);
+    transform: translateX(0%);
+}
+
+.data-list-view-header .add-new-data-sidebar .edit-old-data .data-items,
+.data-thumb-view-header .add-new-data-sidebar .edit-old-data .data-items {
+    border-bottom: 1px solid rgba(0, 0, 0, 0.1);
+    height: calc(100% - 10rem);
+    position: relative;
+    overflow: auto;
+}

@@ -38,6 +38,7 @@ $(document).ready(function() {
         action: function() {
           $(this).removeClass("btn-secondary")
           $(".add-new-data").addClass("show")
+          $(".edit-old-data").removeClass("show")
           $(".overlay-bg").addClass("show")
           $("#data-name, #data-price").val("")
           $("#data-category, #data-status").prop("selectedIndex", 0)
@@ -87,6 +88,7 @@ $(document).ready(function() {
         action: function() {
           $(this).removeClass("btn-secondary")
           $(".add-new-data").addClass("show")
+          $(".edit-old-data").removeClass("show")
           $(".overlay-bg").addClass("show")
         },
         className: "btn-outline-primary"
@@ -118,6 +120,7 @@ $(document).ready(function() {
   // Close sidebar
   $(".hide-data-sidebar, .cancel-data-btn, .overlay-bg").on("click", function() {
     $(".add-new-data").removeClass("show")
+    $(".edit-old-data").removeClass("show")
     $(".overlay-bg").removeClass("show")
     $("#data-name, #data-price").val("")
     $("#data-category, #data-status").prop("selectedIndex", 0)
@@ -128,7 +131,8 @@ $(document).ready(function() {
     e.stopPropagation();
     $('#data-name').val('Altec Lansing - Bluetooth Speaker');
     $('#data-price').val('$99');
-    $(".add-new-data").addClass("show");
+    $(".add-new-data").removeClass("show");
+    $(".edit-old-data").addClass("show")
     $(".overlay-bg").addClass("show");
   });
 

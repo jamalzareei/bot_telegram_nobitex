@@ -26,6 +26,9 @@ class CreateKeyboradTelegramsTable extends Migration
             $table->string("children_type")->nullable();  // text, keyboard, inline_keyboard (array)
             $table->string("same_callback_data")->nullable();  // if this field is not null, find record same with this column
             $table->text("details")->nullable(); // text for show (html)
+            $table->text("details_json")->nullable(); // extra data
+            $table->string("method_telegram")->nullable(); // method telegram
+            $table->string("file")->nullable(); // url or file_id
             $table->string("controller_method")->nullable(); // Path/NameController@methodName
             $table->bigInteger("status_id")->nullable();
             $table->integer("chunk_children")->nullable();

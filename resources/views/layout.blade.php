@@ -35,7 +35,7 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/extensions/toastr.css') }}">
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/custom-rtl.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/style-rtl.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('asset-custom/style-rtl.css') }}">
     <!-- END: Custom CSS-->
 
 </head>
@@ -68,7 +68,7 @@
     <script src="{{ asset('panel/app-assets/js/scripts/components.js') }}"></script>
 
     <script src="{{ asset('panel/app-assets/vendors/js/extensions/toastr.min.js') }}"></script>
-    <script src="{{ asset('panel/app-assets/js/script.js') }}"></script>
+    <script src="{{ asset('asset-custom/script.js') }}"></script>
     <script>
         @if(session('noty'))
             messageToast("{!! session('noty')['title'] !!}", "{!! session('noty')['message'] !!}", "{!! session('noty')['status'] !!}", 5000)

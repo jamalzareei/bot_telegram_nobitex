@@ -34,11 +34,12 @@
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/core/colors/palette-gradient.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/plugins/file-uploaders/dropzone.css') }}">
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/pages/data-list-view.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/vendors/css/extensions/toastr.css') }}">
     <!-- END: Page CSS-->
 
     <!-- BEGIN: Custom CSS-->
     <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/custom-rtl.css') }}">
-    <link rel="stylesheet" type="text/css" href="{{ asset('panel/app-assets/css-rtl/style-rtl.css') }}">
+    <link rel="stylesheet" type="text/css" href="{{ asset('asset-custom/style-rtl.css') }}">
     <!-- END: Custom CSS-->
 
     @yield('head')
@@ -117,7 +118,7 @@
     
     @yield('js')
 
-    <script src="{{ asset('panel/app-assets/js/script.js') }}"></script>
+    <script src="{{ asset('asset-custom/script.js') }}"></script>
     <script>
         @if (session('noty'))
             messageToast("{!! session('noty')['title'] !!}", "{!! session('noty')['message'] !!}", "{!! session('noty')['status'] !!}", 5000)

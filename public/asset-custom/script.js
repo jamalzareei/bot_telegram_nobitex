@@ -284,13 +284,13 @@ if ($('.dropify').length > 0) {
 
 function messageToast(title, message, status, timeOut = 5000) {
     if (status === 'success') {
-        toastr.success(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-right', containerId: 'toast-top-right' })
+        toastr.success(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-left', containerId: 'toast-top-left' })
     } else if (status === 'warning') {
-        toastr.warning(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-right', containerId: 'toast-top-right' })
+        toastr.warning(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-left', containerId: 'toast-top-left' })
     } else if (status === 'error') {
-        toastr.error(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-right', containerId: 'toast-top-right' })
+        toastr.error(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-left', containerId: 'toast-top-left' })
     } else if (status === 'info') {
-        toastr.info(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-right', containerId: 'toast-top-right' })
+        toastr.info(message, title, { "timeOut": timeOut, "closeButton": true, positionClass: 'toast-top-left', containerId: 'toast-top-left' })
     }
 }
 
