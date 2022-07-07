@@ -21,6 +21,7 @@
                 method: 'get',
                 data: { ajax: 'true' },
                 success: function(response) {
+                    console.log(response);
                     $(".load-edit-old-data").html(response);
                 },
                 error: function(request, status, error) {}
@@ -39,11 +40,13 @@
             <thead>
                 <tr>
                     <th></th>
+                    <th>ORDER</th>
                     <th>NAME</th>
                     <th>TYPE</th>
                     <th>CALLBACK DATA</th>
                     <th>CONTROLLER METHOD</th>
                     <th>ACTIVE</th>
+                    <th>PARENT</th>
                     <th>CHILDREN</th>
                     <th>ACTION</th>
                 </tr>
@@ -52,6 +55,7 @@
                 @forelse ($keyboradTelegrams as $keyboard)
                     <tr>
                         <td></td>
+                        <td>{{ $keyboard->orderby }}</td>
                         <td>{{ $keyboard->text }}</td>
                         <td>{{ $keyboard->type }}</td>
                         <td>{{ $keyboard->callback_data }}</td>
@@ -65,10 +69,11 @@
                                 </label>
                             </div>
                         </td>
+                        <td>{{ ($keyboard->parent) ? $keyboard->parent->text : '' }}</td>
                         <td><a href="{{ route('panel.telegram.routes', ['parent_id'=>$keyboard->id]) }}"><i class="fa fa-eye"></i></a></td>
                         <td class="product-action">
                             <span class="action-edit" onclick="editRow('{{ route('panel.telegram.edit.route', ['id'=> $keyboard->id]) }}')"><i class="feather icon-edit"></i></span>
-                            <span class="action-delete"><i class="feather icon-trash"></i></span>
+                            {{-- <span class="action-delete"><i class="feather icon-trash"></i></span> --}}
                         </td>
                     </tr>
                 @empty

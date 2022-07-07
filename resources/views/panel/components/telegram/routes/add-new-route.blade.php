@@ -13,6 +13,11 @@
             <div class="data-fields px-2 mt-3">
 
                 <div class="row">
+                    
+                    <div class="col-sm-12 data-field-col">
+                        <label for="orderby">موقعیت نمایش</label>
+                        <input name="orderby" type="number" class="form-control" id="orderby">
+                    </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="text">عنوان</label>
                         <input name="text" type="text" class="form-control" id="text">

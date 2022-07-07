@@ -127,7 +127,7 @@ $(document).ready(function() {
   })
 
   // On Edit
-  $('.action-edit').on("click",function(e){
+  $(document).on("click",'.action-edit',function(e){
     e.stopPropagation();
     $('#data-name').val('Altec Lansing - Bluetooth Speaker');
     $('#data-price').val('$99');

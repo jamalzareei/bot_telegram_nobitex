@@ -21,6 +21,7 @@ class TelegramController extends Controller
             ->when($parent_id, function ($q) use ($parent_id) {
                 $q->where('parent_id', $parent_id);
             })
+            ->with(['parent'])
             ->get();
         $keyboradTelegramsAll = KeyboradTelegram::all();
         $statuses = Status::all();
@@ -57,10 +58,11 @@ class TelegramController extends Controller
             type: "text"
             url: null
             */]);
-        $parent_callback_data = KeyboradTelegram::where('parent_callback_data', request('parent_callback_data'))->first();
-        $next_callback_data = KeyboradTelegram::where('next_callback_data', request('next_callback_data'))->first();
+        $parent_callback_data = KeyboradTelegram::where('callback_data', request('parent_callback_data'))->first();
+        $next_callback_data = KeyboradTelegram::where('callback_data', request('next_callback_data'))->first();
 
         $keyboardTelegram = KeyboradTelegram::create([
+            'orderby' => request('orderby') ?? 1,
             'text' => request('text'),
             'parent_id' => $parent_callback_data->id ?? null,
             'parent_callback_data' => request('parent_callback_data'),
@@ -91,7 +93,7 @@ class TelegramController extends Controller
             'message' => 'با موفقیت ذخیره گردید',
             'status' => 'success',
             'data' => '',
-            'autoRedirect' => route('panel.telegram.routes')
+            'autoRedirect' => route('panel.telegram.routes',['parent_id'=>$keyboardTelegram->parent_id])
         ], 200);
     }
 
@@ -115,28 +117,32 @@ class TelegramController extends Controller
             type: "text"
             url: null
             */]);
-        $parent_callback_data = KeyboradTelegram::where('parent_callback_data', request('parent_callback_data'))->first();
-        $next_callback_data = KeyboradTelegram::where('next_callback_data', request('next_callback_data'))->first();
+        $parent_callback_data = KeyboradTelegram::where('callback_data', request('parent_callback_data'))->first();
+        $next_callback_data = KeyboradTelegram::where('callback_data', request('next_callback_data'))->first();
 
-        $keyboardTelegram = KeyboradTelegram::where('id', request('id'))->update([
-            'text' => request('text'),
-            'parent_id' => $parent_callback_data->id ?? null,
-            'parent_callback_data' => request('parent_callback_data'),
-            'next_callback_data' => request('next_callback_data'),
-            'next_id' => $next_callback_data->id ?? null,
-            'type' => request('type'),
-            'url' => request('url'),
-            'callback_data' => request('callback_data'),
-            'children_type' => request('children_type'),
-            'same_callback_data' => request('same_callback_data'),
-            'details' => request('details'),
-            'file' => request('file'),
-            'method_telegram' => request('method_telegram'),
-            'controller_method' => request('controller_method'),
-            'status_id' => request('status_id'),
-            'chunk_children' => request('chunk_children'),
-            'actived_at' => request('actived_at') ? Carbon::now() : null,
-        ]);
+        $keyboardTelegram = KeyboradTelegram::where('id', request('id'))->first();
+        if($keyboardTelegram){
+            $keyboardTelegram->orderby = request('orderby') ?? 1;
+            $keyboardTelegram->text = request('text');
+            $keyboardTelegram->parent_id = $parent_callback_data->id ?? null;
+            $keyboardTelegram->parent_callback_data = request('parent_callback_data');
+            $keyboardTelegram->next_callback_data = request('next_callback_data');
+            $keyboardTelegram->next_id = $next_callback_data->id ?? null;
+            $keyboardTelegram->type = request('type');
+            $keyboardTelegram->url = request('url');
+            $keyboardTelegram->callback_data = request('callback_data');
+            $keyboardTelegram->children_type = request('children_type');
+            $keyboardTelegram->same_callback_data = request('same_callback_data');
+            $keyboardTelegram->details = request('details');
+            $keyboardTelegram->file = request('file');
+            $keyboardTelegram->method_telegram = request('method_telegram');
+            $keyboardTelegram->controller_method = request('controller_method');
+            $keyboardTelegram->status_id = request('status_id');
+            $keyboardTelegram->chunk_children = request('chunk_children');
+            $keyboardTelegram->actived_at = request('actived_at') ? Carbon::now() : null;
+            
+            $keyboardTelegram->save();
+        }
 
         session()->put('noty', [
             'title' => '',
@@ -149,7 +155,7 @@ class TelegramController extends Controller
             'message' => 'با موفقیت ذخیره گردید',
             'status' => 'success',
             'data' => '',
-            'autoRedirect' => route('panel.telegram.routes')
+            'autoRedirect' => route('panel.telegram.routes',['parent_id'=>$keyboardTelegram->parent_id])
         ], 200);
     }
 

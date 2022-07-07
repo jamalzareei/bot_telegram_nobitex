@@ -16,9 +16,14 @@
 
                 <div class="row">
                     <div class="col-sm-12 data-field-col">
+                        <label for="orderby">موقعیت نمایش</label>
+                        <input name="orderby" type="number" class="form-control" id="orderby"
+                        value="{{ $keyboardTelegram->orderby ?? '' }}">
+                    </div>
+                    <div class="col-sm-12 data-field-col">
                         <label for="text">عنوان</label>
                         <input name="text" type="text" class="form-control" id="text"
-                            value={{ $keyboardTelegram->text ?? '' }}>
+                            value="{{ $keyboardTelegram->text ?? '' }}">
                     </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="parent_callback_data"> پرنت </label>
@@ -43,7 +48,7 @@
                             @isset($keyboradTelegramsAll)
                                 @forelse ($keyboradTelegramsAll as $keyboard)
                                     <option value="{{ $keyboard->callback_data }}"
-                                        {{ $keyboardTelegram && $keyboard->callback_data == $keyboardTelegram->callback_data ? 'selected' : '' }}>
+                                        {{ $keyboardTelegram && $keyboard->callback_data == $keyboardTelegram->next_callback_data ? 'selected' : '' }}>
                                         {{ $keyboard->text }}</option>
                                 @empty
                                 @endforelse
@@ -67,12 +72,12 @@
                     <div class="col-sm-12 data-field-col">
                         <label for="url">آدرس اینترنتی</label>
                         <input name="url" type="text" class="form-control" id="url"
-                            value={{ $keyboardTelegram->url ?? '' }}>
+                            value="{{ $keyboardTelegram->url ?? '' }}">
                     </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="callback_data">اسلاگ (callback_data)</label>
                         <input type="text" name="callback_data" class="form-control" id="callback_data"
-                            value={{ $keyboardTelegram->callback_data ?? '' }}>
+                            value="{{ $keyboardTelegram->callback_data ?? '' }}">
                     </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="children_type">نوع فرزندان (children_type)</label>
@@ -107,13 +112,13 @@
                     <div class="col-sm-12 data-field-col">
                         <label for="method_telegram">فانکشن تلگرام (method)</label>
                         <input type="text" name="method_telegram" class="form-control" id="method_telegram"
-                            value={{ $keyboardTelegram->method_telegram ?? '' }}>
+                            value="{{ $keyboardTelegram->method_telegram ?? '' }}">
                     </div>
 
                     <div class="col-sm-12 data-field-col">
                         <label for="file">آدرس اینترنتی فایل یا فایل ای دی تلگرام (file)</label>
                         <input type="text" name="file" class="form-control" id="file"
-                            value={{ $keyboardTelegram->file ?? '' }}>
+                            value="{{ $keyboardTelegram->file ?? '' }}">
                     </div>
 
                     <div class="col-sm-12 data-field-col">
@@ -138,7 +143,7 @@
                     <div class="col-sm-12 data-field-col">
                         <label for="chunk_children">chunk_children</label>
                         <input type="text" name="chunk_children" class="form-control" id="chunk_children"
-                            value={{ $keyboardTelegram->chunk_children ?? '' }}>
+                            value="{{ $keyboardTelegram->chunk_children ?? '' }}">
                     </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="status_id">status</label>
