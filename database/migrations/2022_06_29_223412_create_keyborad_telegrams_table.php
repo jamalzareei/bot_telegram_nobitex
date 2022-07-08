@@ -30,8 +30,10 @@ class CreateKeyboradTelegramsTable extends Migration
             $table->string("method_telegram")->nullable(); // method telegram
             $table->string("file")->nullable(); // url or file_id
             $table->string("controller_method")->nullable(); // Path/NameController@methodName
+            $table->string("permissions")->default('guest')->nullable();
             $table->bigInteger("status_id")->nullable();
             $table->integer("chunk_children")->nullable();
+            $table->integer("orderby")->nullable();
             $table->timestamp("actived_at")->nullable();
             $table->timestamps();
         });

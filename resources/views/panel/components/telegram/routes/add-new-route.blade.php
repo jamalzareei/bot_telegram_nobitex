@@ -130,6 +130,14 @@
                             @endisset
                         </select>
                     </div>
+                    
+                    <div class="col-sm-12 data-field-col">
+                        <label for="permissions">سطح دسترسی </label>
+                        <select name="permissions[]" multiple="multiple" class="form-control select2" id="permissions">
+                            <option value="guest">guest</option>
+                            <option value="login">login</option>
+                        </select>
+                    </div>
 
                     <div class="col-sm-12 data-field-col">
                         <div class="custom-control custom-switch custom-switch-success mr-2 mb-1">

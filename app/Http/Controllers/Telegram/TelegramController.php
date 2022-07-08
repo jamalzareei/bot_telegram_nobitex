@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Bot;
 use App\Models\KeyboradTelegram;
+use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -13,19 +14,12 @@ class TelegramController extends Controller
     //
     protected $token = "5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4";
     protected $baseUrl = "https://telegram.shixeh.com/telegram";
+    private $telService;
 
-    // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/getUpdates
-    // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/deleteWebHook?url=
-    // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/sendMessage?chat_id=&amp;text=json
-    // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/setWebHook?url=https://telegram.shixeh.com/telegram.php
-    // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/getWebHookInfo?url=https://tel.freecluster.eu/teleg.php
-
-    // https://panel.servermax.net/clientarea.php?action=productdetails&id=1541
-    //T^5%OLj,HMWy
-
-    public function __conctract()
+    public function __construct()
     {
         # code...
+        $this->telService = new TelegramService();
     }
 
     public function index(Request $request)
@@ -48,22 +42,10 @@ class TelegramController extends Controller
         $file_id = $update['message']['photo'][0]['file_id'] ?? $update['callback_query']['message']['photo'][0]['file_id'] ?? '';
 
 
-        $keyTelegram = KeyboradTelegram::where('callback_data', $message)
-            ->with([
-                'children' => function ($queryChild) {
-                    $queryChild->select('id', 'text', 'callback_data', 'parent_id');
-                }
-            ])
-            ->first();
+        $keyTelegram = $this->telService->getKeyTelegram($message);
 
         if ($keyTelegram && $keyTelegram->same_callback_data) {
-            $keyTelegram = KeyboradTelegram::where('callback_data', $keyTelegram->same_callback_data)
-                ->with([
-                    'children' => function ($queryChild) {
-                        $queryChild->select('id', 'text', 'callback_data', 'parent_id');
-                    }
-                ])
-                ->first();
+            $keyTelegram = $this->telService->getKeyTelegram($keyTelegram->same_callback_data);
         }
 
         $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
@@ -73,27 +55,27 @@ class TelegramController extends Controller
             // اجرای فانکشن 
 
             $keyTelegramOld = KeyboradTelegram::where('callback_data', $botOld->callback_data)->first();
-            $keyTelegram = KeyboradTelegram::where('callback_data', $keyTelegramOld->next_callback_data)
-                ->with([
-                    'children' => function ($queryChild) {
-                        $queryChild->select('id', 'text', 'callback_data', 'parent_id');
-                    }
-                ])->first();
+            
+            $keyTelegram = $this->telService->getKeyTelegram($keyTelegramOld->next_callback_data);
         }
 
-        $dataUser = [
-            '{$firstname}'      => $firstname ?? '',
-            '{$lastname}'       => $lastname ?? '',
-            '{$birthday}'       => $lastname ?? ''
-        ];
+        ///////////login ///////////////
+        $login = false;
+        if( $keyTelegram && $keyTelegram->permissions && (strpos($keyTelegram->permissions, 'login') !== false) && !$login ){
+            // $replyMarkup= json_encode([
+            //     "keyboard" => [['ورود به حساب کاربری']], "resize_keyboard" => true //,"one_time_keyboard" => false
+            // ]);
+            // $this->telService->sendMessage($chat_id, 'ابتدا شماره خود را ثبت نمایید', $replyMarkup);
+            // return '';
+            $keyTelegram = $this->telService->getKeyTelegram('ورود به حساب کاربری');
+        }
+        ///////////login ///////////////
 
-        $replyMarkup = null;
+        $dataUser = $this->telService->getUserData($chat_id);
+
         $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : ''; // json_encode($keyTelegramChildren[0]);
-        if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'keyboard') {
-            $replyMarkup = $this->convertKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
-        } else if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'inline_keyboard') {
-            $replyMarkup = $this->convertInlineKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
-        }
+        
+        $replyMarkup = $this->telService->generateMarkup($keyTelegram);
 
         Bot::create([
             'chate_id' => $chat_id,
@@ -113,51 +95,26 @@ class TelegramController extends Controller
         // $text = json_encode($keyTelegram);
 
 
-        $this->sendMessage($chat_id, $text, $replyMarkup);
+        $this->telService->sendMessage($chat_id, $text, $replyMarkup);
         // $this->sendMessage($bot_id, $message);
         // $this->sendMessage($group_id, $message);
         // $this->sendMessage($chanel_id, $message);
 
     }
 
-    public function convertInlineKeyboards($arrayInlineKeyboards, $chunk_children = 2)
+    public function getWebHookInfo()
     {
-        if ($chunk_children <= 0) $chunk_children = 2;
-        return  json_encode([
-            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children)
-        ]);
-    }
-
-
-    public function convertKeyboards($arrayInlineKeyboards, $chunk_children = 2)
-    {
-        if ($chunk_children <= 0) $chunk_children = 2;
-        return json_encode([
-            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true //,"one_time_keyboard" => false
-        ]);
+        return $this->telService->getWebHookInfo();
     }
 
     public function setWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/setWebHook?url=" . config('telegram.baseUrl'));
-        return $res->json();
+        return $this->telService->setWebHook();
     }
 
     public function deleteWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/deleteWebHook?url=" . config('telegram.baseUrl'));
-        return $res->json();
+        return $this->telService->deleteWebHook();
     }
-
-    public function getWebHookInfo()
-    {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/getWebHookInfo?url=" . config('telegram.baseUrl'));
-        return $res->json();
-    }
-
-    public function sendMessage($chatId, $text, $reply_markup = null)
-    {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
-        return $res->json();
-    }
+    
 }

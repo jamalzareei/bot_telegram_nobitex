@@ -78,6 +78,7 @@ class TelegramController extends Controller
             'method_telegram' => request('method_telegram'),
             'controller_method' => request('controller_method'),
             'status_id' => request('status_id'),
+            'permissions' => implode(",",request('permissions')),
             'chunk_children' => request('chunk_children'),
             'actived_at' => request('actived_at') ? Carbon::now() : null,
         ]);
@@ -138,6 +139,7 @@ class TelegramController extends Controller
             $keyboardTelegram->method_telegram = request('method_telegram');
             $keyboardTelegram->controller_method = request('controller_method');
             $keyboardTelegram->status_id = request('status_id');
+            $keyboardTelegram->permissions = implode(",",request('permissions'));
             $keyboardTelegram->chunk_children = request('chunk_children');
             $keyboardTelegram->actived_at = request('actived_at') ? Carbon::now() : null;
             
