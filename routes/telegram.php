@@ -1,10 +1,11 @@
 <?php
 
+use App\Http\Controllers\Telegram\TelegramController;
 use Illuminate\Support\Facades\Artisan;
 use Illuminate\Support\Facades\Route;
 
 
-Route::match(['get', 'post'], '/', 'TelegramController@index');
+Route::match(['get', 'post'], '/', [TelegramController::class, 'index']);
 
 Route::get('/cache', function(){
     Artisan::call('cache:clear');

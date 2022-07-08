@@ -16,11 +16,11 @@ class CreateAccountsTable extends Migration
         Schema::create('accounts', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
 
             $table->string('bank')->nullable();
             $table->unsignedBigInteger('type_id');
-            $table->foreign('type_id')->references('id')->on('types');
+            // $table->foreign('type_id')->references('id')->on('types');
             $table->string('number'); // IR...  or 6037...
             $table->timestamp("actived_at")->nullable();
             $table->timestamps();

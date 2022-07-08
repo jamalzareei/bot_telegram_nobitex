@@ -21,7 +21,7 @@ class TelegramController extends Controller
             ->when($parent_id, function ($q) use ($parent_id) {
                 $q->where('parent_id', $parent_id);
             })
-            ->with(['parent'])
+            ->with(['children','parent'])
             ->get();
         $keyboradTelegramsAll = KeyboradTelegram::all();
         $statuses = Status::all();

@@ -20,4 +20,14 @@ class KeyboradTelegram extends Model
     {
         return $this->belongsTo($this, 'parent_id', 'id');
     }
+
+    /**
+     * Get all of the children for the KeyboradTelegram
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function children()
+    {
+        return $this->hasMany($this, 'parent_id', 'id');
+    }
 }

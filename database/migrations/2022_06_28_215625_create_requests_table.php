@@ -16,11 +16,11 @@ class CreateRequestsTable extends Migration
         Schema::create('requests', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('statuses');
+            // $table->foreign('status_id')->references('id')->on('statuses');
             $table->unsignedBigInteger('transaction_id')->nullable();
-            $table->foreign('transaction_id')->references('id')->on('transactions');
+            // $table->foreign('transaction_id')->references('id')->on('transactions');
 
             $table->unsignedDecimal('amount', $precision = 20, $scale = 2);
             $table->timestamp("actived_at")->nullable();

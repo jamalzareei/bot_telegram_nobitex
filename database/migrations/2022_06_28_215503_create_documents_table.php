@@ -16,12 +16,12 @@ class CreateDocumentsTable extends Migration
         Schema::create('documents', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
 
             $table->text('path');
             
             $table->unsignedBigInteger('bot_id')->nullable();
-            $table->foreign('bot_id')->references('id')->on('bots');
+            // $table->foreign('bot_id')->references('id')->on('bots');
 
             $table->timestamp("actived_at")->nullable();
             $table->timestamps();

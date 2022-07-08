@@ -16,7 +16,7 @@ class CreateTransactionsTable extends Migration
         Schema::create('transactions', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('user_id');
-            $table->foreign('user_id')->references('id')->on('users');
+            // $table->foreign('user_id')->references('id')->on('users');
             
             $table->string('type')->nullable(); // buy or sell
             $table->unsignedDecimal('discount', $precision = 20, $scale = 2);
@@ -25,7 +25,7 @@ class CreateTransactionsTable extends Migration
             $table->morphs('transactionable');
 
             $table->unsignedBigInteger('status_id');
-            $table->foreign('status_id')->references('id')->on('statuses');
+            // $table->foreign('status_id')->references('id')->on('statuses');
 
             $table->timestamp("actived_at")->nullable();
             $table->timestamps();

@@ -3,6 +3,8 @@
 namespace App\Http\Controllers\Telegram;
 
 use App\Http\Controllers\Controller;
+use App\Models\Bot;
+use App\Models\KeyboradTelegram;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
 
@@ -11,40 +13,7 @@ class TelegramController extends Controller
     //
     protected $token = "5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4";
     protected $baseUrl = "https://telegram.shixeh.com/telegram";
-    protected $keyborads = [
-        ["text" => "", "parent_text" => "", "type" => "text", "url" => "", "callback_data" => "", "children_type" => "keyboard", "details" => "لطفا اطلاعات خود را به درستی وارد نمایید"],
-        ["text" => "/start", "parent_text" => "", "type" => "text", "url" => "", "callback_data" => "/start", "children_type" => "keyboard", "details" => "به ربات خوش آمدید"],
 
-        ["text" => "پروفایل", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "پروفایل", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
-        ["text" => "خرید", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "خرید", "children_type" => "inline_keyboard", "details" => "خرید ارز:"],
-        ["text" => "فروش", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "فروش", "children_type" => "inline_keyboard", "details" => "فروش ارز:"],
-        ["text" => "راهنمای", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "راهنمای", "children_type" => "inline_keyboard", "details" => "راهنمای کاربر"],
-        ["text" => "سوالات متداول", "parent_text" => "/start", "type" => "keyboard", "url" => "", "callback_data" => "سوالات متداول", "children_type" => "inline_keyboard", "details" => "سوالات متداول کاربر"],
-
-        ["text" => "نام", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "firstname", "children_type" => "keyboard", "details" => "نام خود را وارد نمایید"],
-        ["text" => "نام خانوادگی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "lastname", "children_type" => "text", "details" => "نام خانوادگی خود را وارد نمایید"],
-        ["text" => "شماره تماس", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "phone_number", "children_type" => "text", "details" => "شماره تلفن خود را وارد نمایید"],
-        ["text" => "عکس پروفایل", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "photo_user", "children_type" => "text", "details" => "عکس خود را ارسال نمایید"],
-        ["text" => "کد ملی", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "ssn", "children_type" => "text", "details" => "کد ملی خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "پروفایل", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
-        ["text" => "بیت کوین", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_bitcoin", "children_type" => "text", "details" => "مقدار فروش بیت کوین خود را وارد نمایید"],
-        ["text" => "تتر", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "buy_teter", "children_type" => "text", "details" => "مقدار فروش تتر خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "خرید", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
-        ["text" => "تتر", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_teter", "children_type" => "text", "details" => "مقدار خرید تتر خود را وارد نمایید"],
-        ["text" => "بیت کوین", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "sell_bitcoin", "children_type" => "text", "details" => "مقدار خرید بیت کوین خود را وارد نمایید"],
-        ["text" => "بازگشت", "parent_text" => "فروش", "type" => "inline_keyboard", "callback_data" => "/start", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
-        ["text" => "راهنمای", "parent_text" => "راهنمای", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
-        ["text" => "سوالات متداول", "parent_text" => "سوالات متداول", "type" => "inline_keyboard", "url" => "https://google.com", "children_type" => "text", "details" => "برگشت به منوی اصلی"],
-
-        ["text" => "خانوادگی", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "خانوادگی", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
-        ["text" => "انصراف", "parent_text" => "firstname", "type" => "keyboard", "url" => "", "callback_data" => "/start", "children_type" => "inline_keyboard", "details" => "ویرایش اطلاعات پروفایل"],
-        
-        ["text" => "firstname", "parent_text" => "firstname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام:"],
-        ["text" => "lastname", "parent_text" => "lastname", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "نام خانوادگی:"],
-        ["text" => "ssn", "parent_text" => "ssn", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "کد ملی خود را وارد نمایید:"],
-        ["text" => "phone_number", "parent_text" => "phone_number", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "شماره تماس:"],
-        ["text" => "photo_user", "parent_text" => "photo_user", "type" => "text", "callback_data" => "", "children_type" => "text", "details" => "عکس پروفایل خود را ارسال نمایید:"],
-    ];
     // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/getUpdates
     // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/deleteWebHook?url=
     // https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/sendMessage?chat_id=&amp;text=json
@@ -71,19 +40,78 @@ class TelegramController extends Controller
         $bot_id = 926406689;
 
         $message = $update['message']['text'] ?? $update['callback_query']['data'] ?? 'NOT';
-        $chat_id = $update['message']['chat']['id'] ?? $bot_id;
-        // $this->sendMessage($chat_id, $json);
+        $chat_id = $update['message']['chat']['id'] ?? $update['callback_query']['message']['chat']['id'] ?? $bot_id;
+        $firstname = $update['message']['chat']['first_name'] ?? $update['callback_query']['message']['chat']['first_name'] ?? '';
+        $lastname = $update['message']['chat']['last_name'] ?? $update['callback_query']['message']['chat']['last_name'] ?? '';
+        $username = $update['message']['chat']['username'] ?? $update['callback_query']['message']['chat']['username'] ?? '';
+        $message_id = $update['message']['message_id'] ?? $update['callback_query']['message']['message_id'] ?? 0;
+        $file_id = $update['message']['photo'][0]['file_id'] ?? $update['callback_query']['message']['photo'][0]['file_id'] ?? '';
 
-        $row = collect($this->keyborads)->where('callback_data', $message)->first();
-        $replyMarkup = null;
-        if (($row && count($row) > 0)) {
-            $array = collect($this->keyborads)->where('parent_text', $row['callback_data'])->all();
-            $replyMarkup = $row['children_type'] == 'keyboard' ? $this->convertKeyboards($array) : ($row['children_type'] == 'inline_keyboard' ? $this->convertInlineKeyboards($array) : null);
-        }else{
-            $row = $json;//collect($this->keyborads)->first();
+
+        $keyTelegram = KeyboradTelegram::where('callback_data', $message)
+            ->with([
+                'children' => function ($queryChild) {
+                    $queryChild->select('id', 'text', 'callback_data', 'parent_id');
+                }
+            ])
+            ->first();
+
+        if ($keyTelegram && $keyTelegram->same_callback_data) {
+            $keyTelegram = KeyboradTelegram::where('callback_data', $keyTelegram->same_callback_data)
+                ->with([
+                    'children' => function ($queryChild) {
+                        $queryChild->select('id', 'text', 'callback_data', 'parent_id');
+                    }
+                ])
+                ->first();
         }
 
-        $text = $row['details'] ?? json_encode($row);//$json;//
+        $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
+        $botOld = Bot::where('chate_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest()->first();
+
+        if (!$keyTelegram && $botOld) {
+            // اجرای فانکشن 
+
+            $keyTelegramOld = KeyboradTelegram::where('callback_data', $botOld->callback_data)->first();
+            $keyTelegram = KeyboradTelegram::where('callback_data', $keyTelegramOld->next_callback_data)
+                ->with([
+                    'children' => function ($queryChild) {
+                        $queryChild->select('id', 'text', 'callback_data', 'parent_id');
+                    }
+                ])->first();
+        }
+
+        $dataUser = [
+            '{$firstname}'      => $firstname ?? '',
+            '{$lastname}'       => $lastname ?? '',
+            '{$birthday}'       => $lastname ?? ''
+        ];
+
+        $replyMarkup = null;
+        $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : ''; // json_encode($keyTelegramChildren[0]);
+        if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'keyboard') {
+            $replyMarkup = $this->convertKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
+        } else if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'inline_keyboard') {
+            $replyMarkup = $this->convertInlineKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
+        }
+
+        Bot::create([
+            'chate_id' => $chat_id,
+            'message' => $message,
+            'message_id' => $message_id,
+            'file_id' => $file_id,
+            'next_answer' => $keyTelegram->next_callback_data ?? '',
+            'callback_data' => $keyTelegram->callback_data ?? '',
+            'parent_chat' => $keyTelegram->parent_callback_data ?? '',
+            'controller_method' => '',
+            'firstname' => $firstname,
+            'lastname' => $lastname,
+            'username' => $username,
+            'data' => json_encode($update),
+            'session_data' => $keyTelegram && json_encode($keyTelegram) ?? '',
+        ]);
+        // $text = json_encode($keyTelegram);
+
 
         $this->sendMessage($chat_id, $text, $replyMarkup);
         // $this->sendMessage($bot_id, $message);
@@ -92,42 +120,44 @@ class TelegramController extends Controller
 
     }
 
-    public function convertInlineKeyboards($arrayInlineKeyboards)
+    public function convertInlineKeyboards($arrayInlineKeyboards, $chunk_children = 2)
     {
+        if ($chunk_children <= 0) $chunk_children = 2;
         return  json_encode([
-            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards),3)
+            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children)
         ]);
     }
 
 
-    public function convertKeyboards($arrayInlineKeyboards)
+    public function convertKeyboards($arrayInlineKeyboards, $chunk_children = 2)
     {
+        if ($chunk_children <= 0) $chunk_children = 2;
         return json_encode([
-            "keyboard" => array_chunk($arrayInlineKeyboards, 2), "resize_keyboard" => true //,"one_time_keyboard" => false
+            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true //,"one_time_keyboard" => false
         ]);
     }
 
     public function setWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/setWebHook?url=".config('telegram.baseUrl'));
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/setWebHook?url=" . config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function deleteWebHook()
     {
-        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/deleteWebHook?url=".config('telegram.baseUrl'));
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/deleteWebHook?url=" . config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function getWebHookInfo()
     {
-        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/getWebHookInfo?url=".config('telegram.baseUrl'));
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/getWebHookInfo?url=" . config('telegram.baseUrl'));
         return $res->json();
     }
 
     public function sendMessage($chatId, $text, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot".config('telegram.token')."/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
         return $res->json();
     }
 }

@@ -16,7 +16,7 @@ class CreateCurrencyPricesTable extends Migration
         Schema::create('currency_prices', function (Blueprint $table) {
             $table->id();
             $table->unsignedBigInteger('currency_id');
-            $table->foreign('currency_id')->references('id')->on('currencies');
+            // $table->foreign('currency_id')->references('id')->on('currencies');
             
             $table->string('price_buy');
             $table->string('price_sell');

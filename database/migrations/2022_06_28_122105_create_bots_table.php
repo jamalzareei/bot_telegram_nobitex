@@ -15,14 +15,15 @@ class CreateBotsTable extends Migration
     {
         Schema::create('bots', function (Blueprint $table) {
             $table->id();
-            $table->unsignedBigInteger('type_id');
-            $table->foreign('type_id')->references('id')->on('types');
+            $table->unsignedBigInteger('type_id')->nullable();
+            // $table->foreign('type_id')->references('id')->on('types');
 
             $table->string('chate_id'); // telegram chat id...
             $table->text('message');
             $table->string('message_id');
             $table->string('file_id')->nullable();
-            $table->string('next_answer');
+            $table->string('next_answer')->nullable();
+            $table->string('callback_data')->nullable();
             $table->string('parent_chat')->nullable();
             $table->string('controller_method')->nullable();
             $table->string('firstname')->nullable();
