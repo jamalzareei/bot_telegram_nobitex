@@ -2,7 +2,10 @@
 
 namespace App\Services;
 
+use App\Models\Account;
+use App\Models\Bot;
 use App\Models\KeyboradTelegram;
+use App\Models\User;
 use Illuminate\Support\Facades\Http;
 
 class TelegramService
@@ -47,6 +50,12 @@ class TelegramService
         return $res->json();
     }
 
+    public function sendNotification($callback_query_id, $text) // callback_query_id set in btn_inline
+    {
+        $res = Http::get("https://api.telegram.org/botTOKEN/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
+        return $res->json();
+    }
+
     public function generateMarkup($keyTelegram)
     {
         $replyMarkup = null;
@@ -71,11 +80,70 @@ class TelegramService
 
     public function getUserData($chat_id)
     {
+        $user = User::where('chat_id', $chat_id)->with('accounts')->first();
+        
+        $listShaba = Account::where('number', 'like', '%IR%')->pluck('number')->toArray();//
+        $listCredit = Account::where('number', 'not like', '%IR%')->pluck('number')->toArray();
         return [
-            '{$firstname}'      => $firstname ?? '',
-            '{$lastname}'       => $lastname ?? '',
-            '{$birthday}'       => $lastname ?? ''
+            'user'              => $user ? $user : null,
+            '{$firstname}'      => $user->firstname ?? '',
+            '{$lastname}'       => $user->lastname ?? '',
+            '{$birthday}'       => $user->birth_date_fa ?? '',
+            '{$phone}'          => $user->phone ?? '',
+            '{$balance}'        => $user->balance ?? '0',
+            '{$listCredit}'     => implode("\n",$listCredit) ?? 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
+            '{$listShaba}'      => implode("\n",$listShaba) ?? 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
         ];
     }
 
+    public function getDataTelegram()
+    {
+        $data = request();
+        $result = [];
+        $result['message'] = $data['message']['text'] ?? $data['callback_query']['data'] ?? 'NOT';
+        $result['chat_id'] = $data['message']['chat']['id'] ?? $data['callback_query']['message']['chat']['id'] ?? config('telegram.bot_id');
+        $result['firstname'] = $data['message']['chat']['first_name'] ?? $data['callback_query']['message']['chat']['first_name'] ?? '';
+        $result['lastname'] = $data['message']['chat']['last_name'] ?? $data['callback_query']['message']['chat']['last_name'] ?? '';
+        $result['username'] = $data['message']['chat']['username'] ?? $data['callback_query']['message']['chat']['username'] ?? '';
+        $result['message_id'] = $data['message']['message_id'] ?? $data['callback_query']['message']['message_id'] ?? 0;
+        $result['file_id'] = $data['message']['photo'][0]['file_id'] ?? $data['callback_query']['message']['photo'][0]['file_id'] ?? '';
+
+        return $result;
+    }
+
+    public function saveBot($data, $keyTelegram)
+    {        
+        Bot::create([
+            'chat_id' => $data['chat_id'],
+            'message' => $data['message'],
+            'message_id' => $data['message_id'],
+            'file_id' => $data['file_id'],
+            'next_answer' => $keyTelegram->next_callback_data ?? '',
+            'callback_data' => $keyTelegram->callback_data ?? '',
+            'parent_chat' => $keyTelegram->parent_callback_data ?? '',
+            'controller_method' => $keyTelegram->controller_method ?? '',
+            'controller_method_child' => $keyTelegram->controller_method_child ?? '',
+            'firstname' => $data['firstname'],
+            'lastname' => $data['lastname'],
+            'username' => $data['username'],
+            'data' => json_encode(request()->all()),
+            'session_data' => json_encode(request()->all())
+        ]);
+    }
+
+    public function sendMessageFromControllers($data, $callback_date, $methodName = 'sendMessage')
+    {
+        # code...
+        $keyTelegram = $this->getKeyTelegram($callback_date);
+        $dataUser = $this->getUserData($data['chat_id']);
+        $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
+        $replyMarkup = $this->generateMarkup($keyTelegram);
+
+        $this->saveBot($data, $keyTelegram);
+
+        if($methodName == 'sendMessage'){
+            $this->sendMessage($data['chat_id'], $text, $replyMarkup);
+        }
+        
+    }
 }

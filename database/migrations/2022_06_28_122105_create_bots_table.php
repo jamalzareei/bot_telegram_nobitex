@@ -18,7 +18,7 @@ class CreateBotsTable extends Migration
             $table->unsignedBigInteger('type_id')->nullable();
             // $table->foreign('type_id')->references('id')->on('types');
 
-            $table->string('chate_id'); // telegram chat id...
+            $table->string('chat_id'); // telegram chat id...
             $table->text('message');
             $table->string('message_id');
             $table->string('file_id')->nullable();
@@ -26,6 +26,7 @@ class CreateBotsTable extends Migration
             $table->string('callback_data')->nullable();
             $table->string('parent_chat')->nullable();
             $table->string('controller_method')->nullable();
+            $table->string('controller_method_child')->nullable();
             $table->string('firstname')->nullable();
             $table->string('lastname')->nullable();
             $table->string('username')->nullable();

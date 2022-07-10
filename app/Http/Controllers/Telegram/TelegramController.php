@@ -5,8 +5,10 @@ namespace App\Http\Controllers\Telegram;
 use App\Http\Controllers\Controller;
 use App\Models\Bot;
 use App\Models\KeyboradTelegram;
+use App\Services\MainService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\App;
 use Illuminate\Support\Facades\Http;
 
 class TelegramController extends Controller
@@ -29,18 +31,13 @@ class TelegramController extends Controller
         $json = file_get_contents("php://input");
         $update = json_decode($json, true);
 
-        $group_id = -672687753;
-        $chanel_id = -1001697519941;
-        $bot_id = 926406689;
-
         $message = $update['message']['text'] ?? $update['callback_query']['data'] ?? 'NOT';
-        $chat_id = $update['message']['chat']['id'] ?? $update['callback_query']['message']['chat']['id'] ?? $bot_id;
-        $firstname = $update['message']['chat']['first_name'] ?? $update['callback_query']['message']['chat']['first_name'] ?? '';
-        $lastname = $update['message']['chat']['last_name'] ?? $update['callback_query']['message']['chat']['last_name'] ?? '';
-        $username = $update['message']['chat']['username'] ?? $update['callback_query']['message']['chat']['username'] ?? '';
-        $message_id = $update['message']['message_id'] ?? $update['callback_query']['message']['message_id'] ?? 0;
-        $file_id = $update['message']['photo'][0]['file_id'] ?? $update['callback_query']['message']['photo'][0]['file_id'] ?? '';
+        $chat_id = $update['message']['chat']['id'] ?? $update['callback_query']['message']['chat']['id'] ?? config('telegram.bot_id');
 
+
+        $data = $this->telService->getDataTelegram();
+        $dataUser = $this->telService->getUserData($chat_id);
+        $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['$dataUser'=>$dataUser]), null);
 
         $keyTelegram = $this->telService->getKeyTelegram($message);
 
@@ -49,56 +46,41 @@ class TelegramController extends Controller
         }
 
         $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
-        $botOld = Bot::where('chate_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest()->first();
-
-        if (!$keyTelegram && $botOld) {
-            // اجرای فانکشن 
-
-            $keyTelegramOld = KeyboradTelegram::where('callback_data', $botOld->callback_data)->first();
-            
-            $keyTelegram = $this->telService->getKeyTelegram($keyTelegramOld->next_callback_data);
-        }
+        $botOld = Bot::where('chat_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest()->first();
+        $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['1'=>$botOld]), null);
 
         ///////////login ///////////////
         $login = false;
-        if( $keyTelegram && $keyTelegram->permissions && (strpos($keyTelegram->permissions, 'login') !== false) && !$login ){
-            // $replyMarkup= json_encode([
-            //     "keyboard" => [['ورود به حساب کاربری']], "resize_keyboard" => true //,"one_time_keyboard" => false
-            // ]);
-            // $this->telService->sendMessage($chat_id, 'ابتدا شماره خود را ثبت نمایید', $replyMarkup);
-            // return '';
+        if( $keyTelegram && $keyTelegram->permissions && (strpos($keyTelegram->permissions, 'login') !== false) && !$dataUser['user'] ){
+            $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['2'=>$keyTelegram]), null);
             $keyTelegram = $this->telService->getKeyTelegram('ورود به حساب کاربری');
         }
         ///////////login ///////////////
-
-        $dataUser = $this->telService->getUserData($chat_id);
-
-        $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : ''; // json_encode($keyTelegramChildren[0]);
         
+        if (!$keyTelegram && $botOld) {
+
+            $keyTelegramOld = KeyboradTelegram::where('callback_data', $botOld->callback_data)->first();
+
+            $keyTelegram = $this->telService->getKeyTelegram($keyTelegramOld->callback_data);
+            
+            $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['3'=>$keyTelegram]), null);
+
+            if($keyTelegram->controller_method_child){
+                return App::call($keyTelegram->controller_method_child);
+            }
+        }
+        if($keyTelegram->controller_method){
+            return App::call($keyTelegram->controller_method);
+        }
+        
+
+        $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
         $replyMarkup = $this->telService->generateMarkup($keyTelegram);
 
-        Bot::create([
-            'chate_id' => $chat_id,
-            'message' => $message,
-            'message_id' => $message_id,
-            'file_id' => $file_id,
-            'next_answer' => $keyTelegram->next_callback_data ?? '',
-            'callback_data' => $keyTelegram->callback_data ?? '',
-            'parent_chat' => $keyTelegram->parent_callback_data ?? '',
-            'controller_method' => '',
-            'firstname' => $firstname,
-            'lastname' => $lastname,
-            'username' => $username,
-            'data' => json_encode($update),
-            'session_data' => $keyTelegram && json_encode($keyTelegram) ?? '',
-        ]);
-        // $text = json_encode($keyTelegram);
+        $this->telService->saveBot($data, $keyTelegram);
 
-
+        MainService::saveRequestInFile();
         $this->telService->sendMessage($chat_id, $text, $replyMarkup);
-        // $this->sendMessage($bot_id, $message);
-        // $this->sendMessage($group_id, $message);
-        // $this->sendMessage($chanel_id, $message);
 
     }
 

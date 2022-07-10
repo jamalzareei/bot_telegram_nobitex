@@ -77,6 +77,7 @@ class TelegramController extends Controller
             'file' => request('file'),
             'method_telegram' => request('method_telegram'),
             'controller_method' => request('controller_method'),
+            'controller_method_child' => request('controller_method_child'),
             'status_id' => request('status_id'),
             'permissions' => implode(",",request('permissions')),
             'chunk_children' => request('chunk_children'),
@@ -138,6 +139,7 @@ class TelegramController extends Controller
             $keyboardTelegram->file = request('file');
             $keyboardTelegram->method_telegram = request('method_telegram');
             $keyboardTelegram->controller_method = request('controller_method');
+            $keyboardTelegram->controller_method_child = request('controller_method_child');
             $keyboardTelegram->status_id = request('status_id');
             $keyboardTelegram->permissions = implode(",",request('permissions'));
             $keyboardTelegram->chunk_children = request('chunk_children');

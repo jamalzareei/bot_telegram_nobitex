@@ -21,7 +21,7 @@ class User extends Authenticatable
     protected $fillable = [
         'firstname',
         'lastname',
-        'chate_id',
+        'chat_id',
         'email',
         'phone',
         'email_verified_at',
@@ -51,4 +51,23 @@ class User extends Authenticatable
     protected $casts = [
         'email_verified_at' => 'datetime',
     ];
+
+    protected $appends = [
+        'birth_date_fa',
+    ];
+
+    
+    public function getBirthDateFaAttribute() {
+        return $this->birth_date ? verta($this->birth_date)->format('%d %B، %Y') : '';
+    }
+
+    /**
+     * Get all of the accounts for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function accounts()
+    {
+        return $this->hasMany(Account::class);
+    }
 }

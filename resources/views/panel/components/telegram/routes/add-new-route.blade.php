@@ -114,6 +114,19 @@
                             @endisset
                         </select>
                     </div>
+                    
+                    <div class="col-sm-12 data-field-col">
+                        <label for="controller_method_child">کنترلر_متد_فرزند (controller@method)</label>
+                        <select name="controller_method_child" class="form-control select2" id="controller_method_child">
+                            <option value=""> --- انتخاب نمایید --- </option>
+                            @isset($controllers)
+                                @forelse ($controllers as $controller)
+                                    <option value="{{ $controller }}"> {{ $controller }}</option>
+                                @empty
+                                @endforelse
+                            @endisset
+                        </select>
+                    </div>
                     <div class="col-sm-12 data-field-col">
                         <label for="chunk_children">chunk_children</label>
                         <input type="text" name="chunk_children" class="form-control" id="chunk_children">

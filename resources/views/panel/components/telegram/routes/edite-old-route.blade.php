@@ -1,4 +1,6 @@
-
+<script>
+    $('.select2').select2();
+</script>
 <form action="{{ route('panel.telegram.update.route') }}" method="post" class="ajaxForm">
     @csrf
     <input type="hidden" name="id" value="{{$keyboardTelegram->id}}">
@@ -135,6 +137,19 @@
                                     <option value="{{ $controller }}"
                                         {{ $keyboardTelegram && $controller == $keyboardTelegram->controller_method ? 'selected' : '' }}>
                                         {{ $controller }}</option>
+                                @empty
+                                @endforelse
+                            @endisset
+                        </select>
+                    </div>
+                    
+                    <div class="col-sm-12 data-field-col">
+                        <label for="controller_method_child">کنترلر_متد_فرزند (controller@method)</label>
+                        <select name="controller_method_child" class="form-control select2" id="controller_method_child">
+                            <option value=""> --- انتخاب نمایید --- </option>
+                            @isset($controllers)
+                                @forelse ($controllers as $controller)
+                                    <option value="{{ $controller }}"> {{ $controller }}</option>
                                 @empty
                                 @endforelse
                             @endisset
