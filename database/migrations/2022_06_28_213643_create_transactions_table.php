@@ -22,7 +22,7 @@ class CreateTransactionsTable extends Migration
             $table->unsignedDecimal('discount', $precision = 20, $scale = 2);
             $table->unsignedBigInteger('discount_id')->nullable(); // buy or sell
             $table->unsignedDecimal('amount', $precision = 20, $scale = 2);
-            $table->morphs('transactionable');
+            $table->nullableMorphs('transactionable');
 
             $table->unsignedBigInteger('status_id');
             // $table->foreign('status_id')->references('id')->on('statuses');

@@ -50,9 +50,15 @@ class TelegramService
         return $res->json();
     }
 
-    public function sendNotification($callback_query_id, $text) // callback_query_id set in btn_inline
+    public function sendChatAction($chatId, $action)
     {
-        $res = Http::get("https://api.telegram.org/botTOKEN/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendChatAction?chat_id=$chatId&action=$action");
+        return $res->json();
+    }
+
+    public function answerCallbackQuery($chatId, $callback_query_id, $text) // callback_query_id set in btn_inline
+    {
+        $res = Http::get("https://api.telegram.org/botTOKEN/answerCallbackQuery?chat_id=$chatId&callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
         return $res->json();
     }
 
@@ -102,11 +108,16 @@ class TelegramService
         $result = [];
         $result['message'] = $data['message']['text'] ?? $data['callback_query']['data'] ?? 'NOT';
         $result['chat_id'] = $data['message']['chat']['id'] ?? $data['callback_query']['message']['chat']['id'] ?? config('telegram.bot_id');
+        $result['from_id'] = $data['message']['from']['id'] ?? $data['callback_query']['message']['from']['id'] ?? '0';
         $result['firstname'] = $data['message']['chat']['first_name'] ?? $data['callback_query']['message']['chat']['first_name'] ?? '';
         $result['lastname'] = $data['message']['chat']['last_name'] ?? $data['callback_query']['message']['chat']['last_name'] ?? '';
         $result['username'] = $data['message']['chat']['username'] ?? $data['callback_query']['message']['chat']['username'] ?? '';
         $result['message_id'] = $data['message']['message_id'] ?? $data['callback_query']['message']['message_id'] ?? 0;
         $result['file_id'] = $data['message']['photo'][0]['file_id'] ?? $data['callback_query']['message']['photo'][0]['file_id'] ?? '';
+        
+        $result['data_query'] = $data['callback_query']['data'] ?? '';
+        $result['callback_query_id'] = $data['callback_query']['id'] ?? '';
+
 
         return $result;
     }

@@ -20,7 +20,7 @@ class CreateNotificationsTable extends Migration
             $table->unsignedBigInteger('receiver_id')->nullable();
             // $table->foreign('receiver_id')->references('id')->on('users');
 
-            $table->morphs('notificationable');
+            $table->nullableMorphs('notificationable');
             $table->string('title');
             $table->text('message');
             $table->timestamps();
