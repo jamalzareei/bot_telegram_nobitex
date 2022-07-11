@@ -46,7 +46,13 @@ class TelegramService
 
     public function sendMessage($chatId, $text, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text&reply_markup=$reply_markup");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n&reply_markup=$reply_markup");
+        return $res->json();
+    }
+    
+    public function sendMessageReply($chatId, $text, $reply_to_message_id)
+    {
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text&reply_to_message_id=$reply_to_message_id");
         return $res->json();
     }
 
@@ -56,9 +62,9 @@ class TelegramService
         return $res->json();
     }
 
-    public function answerCallbackQuery($chatId, $callback_query_id, $text) // callback_query_id set in btn_inline
+    public function answerCallbackQuery($callback_query_id, $text)
     {
-        $res = Http::get("https://api.telegram.org/botTOKEN/answerCallbackQuery?chat_id=$chatId&callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
         return $res->json();
     }
 
@@ -97,6 +103,7 @@ class TelegramService
             '{$birthday}'       => $user->birth_date_fa ?? '',
             '{$phone}'          => $user->phone ?? '',
             '{$balance}'        => $user->balance ?? '0',
+            '{$national_code}'  => $user->national_code ?? '0',
             '{$listCredit}'     => implode("\n",$listCredit) ?? 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
             '{$listShaba}'      => implode("\n",$listShaba) ?? 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
         ];

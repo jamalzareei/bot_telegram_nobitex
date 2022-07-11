@@ -110,6 +110,24 @@ class UsersController extends Controller
         $this->telService->sendMessageFromControllers($data, 'پروفایل');
     }
 
+    public function changeNationalCode()
+    {
+        $data = $this->telService->getDataTelegram();
+        $data['message'] = MainService::ConvertToEn($data['message']);
+
+        if(!MainService::checkNationalCode($data['message'])){
+            // $this->telService->answerCallbackQuery($data['callback_query_id'], 'لطفا کد ملی خود را صحیح وارد نمایید.');
+            $this->telService->sendMessageReply($data['chat_id'], 'لطفا کد ملی خود را صحیح وارد نمایید.', $data['message_id']);
+            return  false;
+        }
+
+        $user = User::where('chat_id', $data['chat_id'])->first();
+        $user->national_code = $data['message'];
+        $user->save();
+
+        $this->telService->sendMessageFromControllers($data, 'پروفایل');
+    }
+
     public function changeBirthDay()
     {
         $data = $this->telService->getDataTelegram();

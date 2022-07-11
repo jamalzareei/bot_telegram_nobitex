@@ -23,6 +23,7 @@ class CreateUsersTable extends Migration
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
             $table->string('password');
+            $table->string('national_code')->nullable(); // code meli
             $table->timestamp('birth_date')->nullable();
             $table->string('balance')->default(0);
             $table->string('code_confirm')->nullable();

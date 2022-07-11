@@ -28,6 +28,6 @@ class KeyboradTelegram extends Model
      */
     public function children()
     {
-        return $this->hasMany($this, 'parent_id', 'id');
+        return $this->hasMany($this, 'parent_id', 'id')->orderBy('orderby');
     }
 }

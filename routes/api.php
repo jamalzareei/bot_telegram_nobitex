@@ -24,6 +24,7 @@ Route::get('get-number-phone', [UsersController::class, 'getNumberPhone']);
 Route::get('confirm-number-phone', [UsersController::class, 'confirmNumberPhone']);
 Route::get('change-first-name', [UsersController::class, 'changeFirstName']);
 Route::get('change-last-name', [UsersController::class, 'changeLastName']);
+Route::get('change-national-code', [UsersController::class, 'changeNationalCode']);
 Route::get('change-birth-day', [UsersController::class, 'changeBirthDay']);
 Route::get('update-credit-user', [UsersController::class, 'updateCreditUser']);
 Route::get('update-shaba-user', [UsersController::class, 'updateShabaUser']);
