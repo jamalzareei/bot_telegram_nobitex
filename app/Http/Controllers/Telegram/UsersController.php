@@ -204,4 +204,13 @@ class UsersController extends Controller
         
         $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
     }
+
+    public function confirmAccount()
+    {
+        $data = $this->telService->getDataTelegram();
+
+        $this->telService->answerCallbackQuery($data['callback_query_id'], 'اطلاعات حساب شما تکمیل نمیباشد', $url = null);
+        // $this->telService->sendMessage($data['chat_id'], $data['callback_query_id'] , null);
+        // $this->telService->sendMessageFromControllers($data, 'در حال تایید اطلاعات حساب شما');
+    }
 }

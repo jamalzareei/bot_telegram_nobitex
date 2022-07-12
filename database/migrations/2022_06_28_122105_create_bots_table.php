@@ -21,6 +21,7 @@ class CreateBotsTable extends Migration
             $table->string('chat_id'); // telegram chat id...
             $table->text('message');
             $table->string('message_id');
+            $table->string('callback_query_id')->nullable();
             $table->string('file_id')->nullable();
             $table->string('next_answer')->nullable();
             $table->string('callback_data')->nullable();

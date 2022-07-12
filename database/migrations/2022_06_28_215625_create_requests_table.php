@@ -18,7 +18,9 @@ class CreateRequestsTable extends Migration
             $table->unsignedBigInteger('user_id');
             // $table->foreign('user_id')->references('id')->on('users');
             $table->unsignedBigInteger('status_id');
+            $table->unsignedBigInteger('type_id');
             // $table->foreign('status_id')->references('id')->on('statuses');
+            $table->unsignedBigInteger('type_id'); // variz ya bardasht
             $table->unsignedBigInteger('transaction_id')->nullable();
             // $table->foreign('transaction_id')->references('id')->on('transactions');
 

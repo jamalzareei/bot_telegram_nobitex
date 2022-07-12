@@ -46,13 +46,13 @@ class TelegramService
 
     public function sendMessage($chatId, $text, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n&reply_markup=$reply_markup");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n &reply_markup=$reply_markup");
         return $res->json();
     }
     
-    public function sendMessageReply($chatId, $text, $reply_to_message_id)
+    public function sendMessageReply($chatId, $text, $reply_to_message_id, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text&reply_to_message_id=$reply_to_message_id");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n &reply_to_message_id=$reply_to_message_id&reply_markup=$reply_markup");
         return $res->json();
     }
 
@@ -62,9 +62,9 @@ class TelegramService
         return $res->json();
     }
 
-    public function answerCallbackQuery($callback_query_id, $text)
+    public function answerCallbackQuery($callback_query_id, $text, $url = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true");
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true&url=$url");
         return $res->json();
     }
 
@@ -136,6 +136,7 @@ class TelegramService
             'message' => $data['message'],
             'message_id' => $data['message_id'],
             'file_id' => $data['file_id'],
+            'callback_query_id' => $data['callback_query_id'] ?? null,
             'next_answer' => $keyTelegram->next_callback_data ?? '',
             'callback_data' => $keyTelegram->callback_data ?? '',
             'parent_chat' => $keyTelegram->parent_callback_data ?? '',
@@ -149,10 +150,10 @@ class TelegramService
         ]);
     }
 
-    public function sendMessageFromControllers($data, $callback_date, $methodName = 'sendMessage')
+    public function sendMessageFromControllers($data, $callback_data, $methodName = 'sendMessage')
     {
         # code...
-        $keyTelegram = $this->getKeyTelegram($callback_date);
+        $keyTelegram = $this->getKeyTelegram($callback_data);
         $dataUser = $this->getUserData($data['chat_id']);
         $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
         $replyMarkup = $this->generateMarkup($keyTelegram);

@@ -70,6 +70,7 @@ class TelegramController extends Controller
             }
         }
         if($keyTelegram->controller_method){
+            $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['$keyTelegram->controller_method'=>$keyTelegram->controller_method]), null);
             return App::call($keyTelegram->controller_method);
         }
         

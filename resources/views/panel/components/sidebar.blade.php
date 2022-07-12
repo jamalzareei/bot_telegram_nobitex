@@ -55,6 +55,20 @@
                 </a>
             </li>
             
+            <li class=" nav-item">
+                <a href="{{ route('panel.types.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">تعریف انواع "نوع" مدل ها</span>
+                </a>
+            </li>
+            
+            <li class=" nav-item">
+                <a href="{{ route('panel.statuses.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">تعریف انواع "وضعیت" مدل ها</span>
+                </a>
+            </li>
+            
         </ul>
     </div>
 </div>

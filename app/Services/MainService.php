@@ -27,6 +27,28 @@ class MainService
         return $controllers;
     }
 
+    public static function models()
+    {
+        $path = app_path("Models/");
+        $namespace = "App\\Models\\";
+        $out = [];
+
+        $iterator = new \RecursiveIteratorIterator(
+            new \RecursiveDirectoryIterator($path),
+            \RecursiveIteratorIterator::SELF_FIRST
+        );
+        foreach ($iterator as $item) {
+            /**
+             * @var \SplFileInfo $item
+             */
+            if ($item->isReadable() && $item->isFile() && mb_strtolower($item->getExtension()) === 'php') {
+                $out[] =  $namespace .
+                    str_replace("/", "\\", mb_substr($item->getRealPath(), mb_strlen($path), -4));
+            }
+        }
+        return $out;
+    }
+
 
     public static function saveRequestInFile()
     {

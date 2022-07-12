@@ -99,7 +99,7 @@ class TelegramController extends Controller
         ], 200);
     }
 
-    public function UpdateRoute()
+    public function updateRoute()
     {
         # code...
         request()->validate([
@@ -173,7 +173,7 @@ class TelegramController extends Controller
         $statuses = Status::all();
         $controllers = MainService::controllers();
 
-        return view('panel.components.telegram.routes.edite-old-route', [
+        return view('panel.components.telegram.routes.edit-old-route', [
             'keyboradTelegramsAll'  => $keyboradTelegramsAll,
             'statuses'              => $statuses,
             'controllers'           => $controllers,
