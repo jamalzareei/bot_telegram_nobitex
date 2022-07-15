@@ -39,6 +39,12 @@ class TelegramController extends Controller
         $dataUser = $this->telService->getUserData($chat_id);
         $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['$dataUser'=>$dataUser]), null);
 
+        $checkSubescrybe  = $this->telService->getChatMember('@jamalzareie', $data['from_id']);// creator و left,  member
+        if($checkSubescrybe['result']['status'] == 'left'){
+            $this->telService->saveBot($data, null);
+            return $this->telService->sendMessage($chat_id, 'شما عضو ربات تلگرام نیستید. @jamalzareie', null);
+        }
+        
         $keyTelegram = $this->telService->getKeyTelegram($message);
 
         if ($keyTelegram && $keyTelegram->same_callback_data) {
@@ -65,12 +71,14 @@ class TelegramController extends Controller
             
             $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['3'=>$keyTelegram]), null);
 
-            if($keyTelegram->controller_method_child){
+            if($keyTelegram && $keyTelegram->controller_method_child){
+                $this->telService->saveBot($data, $keyTelegram);
                 return App::call($keyTelegram->controller_method_child);
             }
         }
-        if($keyTelegram->controller_method){
+        if($keyTelegram && $keyTelegram->controller_method){
             $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['$keyTelegram->controller_method'=>$keyTelegram->controller_method]), null);
+            $this->telService->saveBot($data, $keyTelegram);
             return App::call($keyTelegram->controller_method);
         }
         

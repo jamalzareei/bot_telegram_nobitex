@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\NobitexAPIController;
 use App\Http\Controllers\Pay\NextpayController;
 use App\Http\Controllers\Telegram\FinancialController;
 use App\Http\Controllers\Telegram\UsersController;
@@ -37,8 +38,11 @@ Route::get('confirm-account', [UsersController::class, 'confirmAccount']);
 Route::get('inventory-increase', [FinancialController::class, 'inventoryIncrease']);
 Route::get('withdrawal-from-inventory', [FinancialController::class, 'ithdrawalFromInventory']);
 
+Route::get('market/global-stats', [NobitexAPIController::class, 'marketGlobalStats']);
+
+
 
 Route::prefix('pay')->namespace('Pay')->group(function () {
     Route::get('pay-nextpay/{model}/{id}/{type_request?}', [NextpayController::class, 'pay'])->name('pay.nextpay');
-    Route::get('callback-nextpay/{model}/{id}/{type_request?}', [NextpayController::class, 'callback'])->name('callback.nextpay');
+    Route::get('callback-nextpay/{pay_id}/{type_request?}', [NextpayController::class, 'callback'])->name('callback.nextpay');
 });

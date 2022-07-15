@@ -14,7 +14,8 @@ class TelegramService
     {
         if ($chunk_children <= 0) $chunk_children = 2;
         return  json_encode([
-            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children)
+            'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children),
+            //'remove_keyboard' => true
         ]);
     }
 
@@ -22,7 +23,7 @@ class TelegramService
     {
         if ($chunk_children <= 0) $chunk_children = 2;
         return json_encode([
-            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true //,"one_time_keyboard" => false
+            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true ,// "remove_keyboard" => true
         ]);
     }
 
@@ -65,6 +66,12 @@ class TelegramService
     public function answerCallbackQuery($callback_query_id, $text, $url = null)
     {
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/answerCallbackQuery?callback_query_id=". $callback_query_id ."&text=$text&show_alert=true&url=$url");
+        return $res->json();
+    }
+    
+    public function getChatMember($chatId, $user_id)
+    {
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/getChatMember?chat_id=$chatId&user_id=$user_id");
         return $res->json();
     }
 

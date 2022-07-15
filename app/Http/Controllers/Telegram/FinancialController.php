@@ -43,7 +43,7 @@ class FinancialController extends Controller
                 [
                     [
                         "text" => 'اتصال به درگاه و پرداخت',
-                        "callback_data" => 'اتصال به درگاه و پرداخت',
+                        "callback_data" => 'اتصال به درگاه و پرداخت',//{user_id}/{request_id}/{type_request?}
                         "url" => route('pay.nextpay', ['model' => 'Request', 'id' => $requestModel->id, 'type_request' => 'telegram'])
                     ]
                 ]
