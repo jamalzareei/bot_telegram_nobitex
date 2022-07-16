@@ -149,7 +149,8 @@
                             <option value=""> --- انتخاب نمایید --- </option>
                             @isset($controllers)
                                 @forelse ($controllers as $controller)
-                                    <option value="{{ $controller }}"> {{ $controller }}</option>
+                                    <option value="{{ $controller }}"
+                                    {{ $keyboardTelegram && $controller == $keyboardTelegram->controller_method_child ? 'selected' : '' }}> {{ $controller }}</option>
                                 @empty
                                 @endforelse
                             @endisset

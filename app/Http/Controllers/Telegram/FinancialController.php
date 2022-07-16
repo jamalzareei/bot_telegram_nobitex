@@ -8,6 +8,7 @@ use App\Models\Request as ModelsRequest;
 use App\Models\Status;
 use App\Models\Type;
 use App\Models\User;
+use App\Services\FinancialService;
 use App\Services\MainService;
 use App\Services\TelegramService;
 
@@ -17,6 +18,7 @@ class FinancialController extends Controller
     {
         # code...
         $this->telService = new TelegramService();
+        $this->FinancialService = new FinancialService();
     }
 
     public function inventoryIncrease()
@@ -67,6 +69,14 @@ class FinancialController extends Controller
         $data['message'] = MainService::ConvertToEn($data['message']);
 
         $user = User::where('chat_id', $data['chat_id'])->first();
+
+        $listWallet = FinancialService::inventoryCalculation($user->id);
+        
+        $bot = Bot::where('chat_id', $user->chat_id)->latest()->first();
+
+        if(!($listWallet && $listWallet['balance'] && $listWallet['balance'] >= $data['message'])) {
+            return $this->telService->sendMessageReply($user->chat_id, 'مبلغ درخواستی بیش از کیف پول شما است', $bot->message_id, null);
+        }
 
         $type = Type::where('slug', 'برداشت-موجودی')->first();
         $status = Status::where('slug', 'در-انتظار-تایید-مدیریت')->first();

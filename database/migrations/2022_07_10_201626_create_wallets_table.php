@@ -19,9 +19,9 @@ class CreateWalletsTable extends Migration
             $table->unsignedDecimal('amount', $precision = 20, $scale = 2);
             $table->text('details')->nullable();
             $table->nullableMorphs('walletable');//->nullable();
-            $table->text('pay_id')->nullable();
-            $table->text('status_id')->nullable(); // 
-            $table->text('type')->nullable(); // variz ya bardash (deposit harvest)
+            $table->biginteger('pay_id')->nullable();
+            $table->biginteger('status_id')->nullable(); // 
+            $table->biginteger('type_id')->nullable(); // 
             $table->timestamps();
         });
     }

@@ -8,6 +8,7 @@ use App\Models\Pay;
 use App\Models\Request as ModelsRequest;
 use App\Models\Status;
 use App\Models\User;
+use App\Services\FinancialService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Http;
@@ -24,6 +25,7 @@ class NextpayController extends Controller
         $this->apiKey = config('telegram.apiNextPay');
         $this->currency = 'IRR';
         $this->telService = new TelegramService();
+        $this->FinancialService = new FinancialService();
     }
 
     public function pay($model, $id, $type_request = null)
@@ -165,6 +167,8 @@ class NextpayController extends Controller
             $resTextCode
             .
             ";
+
+            $this->FinancialService->inventoryIncrease($pay->id); // افزایش موجودی
 
             $this->telService->sendMessageReply($user->chat_id, $text, $bot->message_id, null);
 

@@ -47,13 +47,24 @@ class TelegramService
 
     public function sendMessage($chatId, $text, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n &reply_markup=$reply_markup");
+        // $text = '
+        // <b>bold</b>
+        // <strong>bold</strong>
+        // <i>italic</i>
+        // <em>italic</em>
+        // <a href="http://www.example.com/">inline URL</a>
+        // <code>inline fixed-width code</code>
+        // <pre>pre-formatted fixed-width code block</pre>
+        // ';
+        $text = urlencode($text);
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text &reply_markup=$reply_markup&parse_mode=html");
         return $res->json();
     }
     
     public function sendMessageReply($chatId, $text, $reply_to_message_id, $reply_markup = null)
     {
-        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text\n &reply_to_message_id=$reply_to_message_id&reply_markup=$reply_markup");
+        $text = urlencode($text);
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text &reply_to_message_id=$reply_to_message_id&reply_markup=$reply_markup&parse_mode=html");
         return $res->json();
     }
 
@@ -103,6 +114,7 @@ class TelegramService
         
         $listShaba = Account::where('number', 'like', '%IR%')->pluck('number')->toArray();//
         $listCredit = Account::where('number', 'not like', '%IR%')->pluck('number')->toArray();
+        $listWallet = FinancialService::inventoryCalculation($user->id);
         return [
             'user'              => $user ? $user : null,
             '{$firstname}'      => $user->firstname ?? '',
@@ -113,6 +125,8 @@ class TelegramService
             '{$national_code}'  => $user->national_code ?? '0',
             '{$listCredit}'     => implode("\n",$listCredit) ?? 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
             '{$listShaba}'      => implode("\n",$listShaba) ?? 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
+            '{$listWallet}'      => $listWallet['str'],
+            '{$balance}'        => $listWallet['balance'],
         ];
     }
 
