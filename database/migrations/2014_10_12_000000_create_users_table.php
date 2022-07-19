@@ -22,6 +22,7 @@ class CreateUsersTable extends Migration
             $table->string('phone')->unique(); // 0098...
             $table->timestamp('email_verified_at')->nullable();
             $table->timestamp('phone_verified_at')->nullable();
+            $table->integer('login_telegram')->default(0);
             $table->string('password');
             $table->string('national_code')->nullable(); // code meli
             $table->timestamp('birth_date')->nullable();

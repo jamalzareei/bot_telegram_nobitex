@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\Panel\FaqsController;
 use App\Http\Controllers\Panel\StatusesController;
 use App\Http\Controllers\Panel\TelegramController;
 use App\Http\Controllers\Panel\TypesController;
@@ -28,6 +29,12 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::post('/statuses/add', [StatusesController::class, 'add'])->name('panel.statuses.add.status');
     Route::get('/statuses/edit', [StatusesController::class, 'edit'])->name('panel.statuses.edit.status');
     Route::post('/statuses/update', [StatusesController::class, 'update'])->name('panel.statuses.update.status');
+
+    
+    Route::get('/faqs-list', [FaqsController::class, 'list'])->name('panel.faqs.list');
+    Route::post('/faqs/add', [FaqsController::class, 'add'])->name('panel.faq.add');
+    Route::get('/faqs/edit', [FaqsController::class, 'edit'])->name('panel.faq.edit');
+    Route::post('/faqs/update', [FaqsController::class, 'update'])->name('panel.faq.update');
     
 });
 

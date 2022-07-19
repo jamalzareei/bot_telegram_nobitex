@@ -69,23 +69,23 @@ class FinancialService
         $typeDec = Type::where('slug', 'برداشت')->first();
         
         $wallets = Wallet::where('user_id', $user_id)->get();
-        $data['str'] = ' شرح حساب ';
+        $data['str'] = " شرح حساب \n\n";
         $data['balance'] = 0;
         foreach ($wallets as $key => $wallet) {
             # code...
             $type = null;
             if($wallet->type_id == $typeInc->id){
                 $data['balance'] += $wallet->amount;
-                $type = 'واریز';
+                $type = '✅ واریز';
             }else if($wallet->type_id == $typeDec->id){
                 $data['balance'] -= $wallet->amount;
-                $type = 'برداشت';
+                $type = '❌ برداشت';
             }
             $numFormatAmount = number_format($wallet->amount);
-            $data['str'] .= "<pre>$type $numFormatAmount ریال </pre>";// $wallet->created_at
+            $data['str'] .= "\n$type $numFormatAmount ریال \n";// $wallet->created_at
         }
         $formatBalance = number_format($data['balance']);
-        $data['str'] .= "================<code><pre>موجودی $formatBalance ریال</pre></code>";
+        $data['str'] .= "\n🟰🟰🟰🟰🟰🟰🟰🟰🟰\n\n*موجودی $formatBalance ریال*\n\n 💲💲💲💲💲💲💲";
         return $data;
         
     }

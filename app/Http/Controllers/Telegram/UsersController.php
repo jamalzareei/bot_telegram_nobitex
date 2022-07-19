@@ -24,19 +24,26 @@ class UsersController extends Controller
     {
         # code...
         $data = $this->telService->getDataTelegram();
+        $data['message'] = ($data['message'] != 'NOT') ? $data['message'] : $data['phone_number'];
         $data['message'] = MainService::ConvertToEn($data['message']);
-        if (!preg_match("/^09[0-9]{9}$/", $data['message'])) {
+        $data['message'] = substr($data['message'], -10);
+
+        if (!preg_match("/^9[0-9]{9}$/", $data['message'])) {
             $this->telService->sendMessage($data['chat_id'], 'فرمت شماره وارد شده اشتباه است.', null);
             return  false;
         }
 
-        $phone = '+98' . substr($data['message'], -10);
+        $phone = '+98' . $data['message'];
         $codeConfirm = rand(1000, 9999);
 
         $user = User::where('phone', $phone)->first(); // where('chat_id', $data['chat_id'])->
         $userChatId = User::where('chat_id', $data['chat_id'])->first(); // where('chat_id', $data['chat_id'])->
+        // if ($userChatId && $user) {
+        //     $this->telService->sendMessage($data['chat_id'], "شماره شما قبلا ثبت شده است: $user->phone", null);
+        //     return  false;
+        // }
         if ($userChatId && !$user) {
-            $this->telService->sendMessage($data['chat_id'], "شماره شما قبلا ثبت شده است: $user->phone", null);
+            $this->telService->sendMessage($data['chat_id'], "چت ای دی شما با شماره ی دیگری ست شده است", null);
             return  false;
         }
         if (!$userChatId && $user) {
@@ -53,6 +60,7 @@ class UsersController extends Controller
             $user->password = Hash::make($data['message']);
         }
 
+        $user->login_telegram = 0;
         $user->code_confirm = $codeConfirm;
         $user->save();
 
@@ -78,6 +86,7 @@ class UsersController extends Controller
             $this->telService->sendMessage($data['chat_id'], 'کد تایید اشتباه است.', null);
             return  false;
         }
+        $user->login_telegram = 1;
         $user->code_confirm = null;
         $user->phone_verified_at = Carbon::now();
         $user->save();

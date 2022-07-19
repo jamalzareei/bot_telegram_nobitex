@@ -36,7 +36,7 @@ class TelegramController extends Controller
 
 
         $data = $this->telService->getDataTelegram();
-        $dataUser = $this->telService->getUserData($chat_id);
+        $dataUser = $this->telService->getUserData($chat_id, $message);
         $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['$dataUser'=>$dataUser]), null);
 
         $checkSubescrybe  = $this->telService->getChatMember('@jamalzareie', $data['from_id']);// creator و left,  member
@@ -52,7 +52,7 @@ class TelegramController extends Controller
         }
 
         $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
-        $botOld = Bot::where('chat_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest()->first();
+        $botOld = Bot::where('chat_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest('id')->first();
         $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['1'=>$botOld]), null);
 
         ///////////login ///////////////

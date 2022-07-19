@@ -1,5 +1,6 @@
 <?php
 
+use App\Http\Controllers\API\FaqsController;
 use App\Http\Controllers\API\NobitexAPIController;
 use App\Http\Controllers\Pay\NextpayController;
 use App\Http\Controllers\Telegram\FinancialController;
@@ -40,7 +41,8 @@ Route::get('withdrawal-from-inventory', [FinancialController::class, 'ithdrawalF
 
 Route::get('market/global-stats', [NobitexAPIController::class, 'marketGlobalStats']);
 
-
+Route::get('faqs', [FaqsController::class, 'faqs']);
+Route::get('faq-insert', [FaqsController::class, 'faqInsert']);
 
 Route::prefix('pay')->namespace('Pay')->group(function () {
     Route::get('pay-nextpay/{model}/{id}/{type_request?}', [NextpayController::class, 'pay'])->name('pay.nextpay');

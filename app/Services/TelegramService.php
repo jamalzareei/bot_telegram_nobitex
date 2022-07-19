@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Account;
 use App\Models\Bot;
+use App\Models\Faq;
 use App\Models\KeyboradTelegram;
 use App\Models\User;
 use Illuminate\Support\Facades\Http;
@@ -22,6 +23,11 @@ class TelegramService
     public function convertKeyboards($arrayInlineKeyboards, $chunk_children = 2)
     {
         if ($chunk_children <= 0) $chunk_children = 2;
+        foreach($arrayInlineKeyboards as $key => $value) {
+            if($arrayInlineKeyboards[$key]['callback_data'] == 'درخواست شماره تلفن'){
+                $arrayInlineKeyboards[$key]['request_contact'] = true;
+            }
+        }
         return json_encode([
             "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true ,// "remove_keyboard" => true
         ]);
@@ -108,13 +114,13 @@ class TelegramService
             ->first();
     }
 
-    public function getUserData($chat_id)
+    public function getUserData($chat_id, $message)
     {
-        $user = User::where('chat_id', $chat_id)->with('accounts')->first();
+        $user = User::where('chat_id', $chat_id)->where('login_telegram', 1)->with('accounts')->first();
         
         $listShaba = Account::where('number', 'like', '%IR%')->pluck('number')->toArray();//
         $listCredit = Account::where('number', 'not like', '%IR%')->pluck('number')->toArray();
-        $listWallet = FinancialService::inventoryCalculation($user->id);
+        $listWallet = $user ? FinancialService::inventoryCalculation($user->id) : null;
         return [
             'user'              => $user ? $user : null,
             '{$firstname}'      => $user->firstname ?? '',
@@ -125,8 +131,9 @@ class TelegramService
             '{$national_code}'  => $user->national_code ?? '0',
             '{$listCredit}'     => implode("\n",$listCredit) ?? 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
             '{$listShaba}'      => implode("\n",$listShaba) ?? 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
-            '{$listWallet}'      => $listWallet['str'],
-            '{$balance}'        => $listWallet['balance'],
+            '{$listWallet}'     => $listWallet['str'] ?? '',
+            '{$balance}'        => $listWallet['balance'] ?? '',
+            '{$faqsList}'       => $this->faqsList(),
         ];
     }
 
@@ -146,6 +153,8 @@ class TelegramService
         $result['data_query'] = $data['callback_query']['data'] ?? '';
         $result['callback_query_id'] = $data['callback_query']['id'] ?? '';
 
+        
+        $result['phone_number'] = $data["message"]["contact"]["phone_number"] ?? '';
 
         return $result;
     }
@@ -167,7 +176,7 @@ class TelegramService
             'lastname' => $data['lastname'],
             'username' => $data['username'],
             'data' => json_encode(request()->all()),
-            'session_data' => json_encode(request()->all())
+            'session_data' => json_encode($data)
         ]);
     }
 
@@ -175,15 +184,33 @@ class TelegramService
     {
         # code...
         $keyTelegram = $this->getKeyTelegram($callback_data);
-        $dataUser = $this->getUserData($data['chat_id']);
+        
+        $this->saveBot($data, $keyTelegram);
+
+        $dataUser = $this->getUserData($data['chat_id'], $data['message']);
         $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
         $replyMarkup = $this->generateMarkup($keyTelegram);
 
-        $this->saveBot($data, $keyTelegram);
 
         if($methodName == 'sendMessage'){
             $this->sendMessage($data['chat_id'], $text, $replyMarkup);
         }
+        
+    }
+
+    public function faqsList()
+    {
+        # code...
+        $faqs = Faq::whereNotNull('actived_at')->whereNotNull('title')->whereNotNull('answer')->get();
+
+        $str = '';
+        foreach ($faqs as $key => $faq) {
+            # code...
+            $row = $key+1;
+            $str .= "\n$row- $faq->title\n💯 $faq->answer\n";
+        }
+        $str .= "\n 💲💲💲💲💲💲💲";
+        return $str;
         
     }
 }

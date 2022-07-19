@@ -60,6 +60,9 @@ class FinancialController extends Controller
         .
         ";
 
+        
+        $this->telService->saveBot($data, $keyTelegram = null);
+
         $this->telService->sendMessageReply($data['chat_id'], $text, $data['message_id'], $reply_markup);
     }
 
@@ -100,6 +103,8 @@ class FinancialController extends Controller
         نوع: $type->name
         .
         ";
+
+        $this->telService->saveBot($data, $keyTelegram = null);
 
         $this->telService->sendMessageReply($data['chat_id'], $text, $data['message_id'], $reply_markup);
     }
