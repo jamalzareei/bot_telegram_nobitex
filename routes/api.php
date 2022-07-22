@@ -4,6 +4,7 @@ use App\Http\Controllers\API\FaqsController;
 use App\Http\Controllers\API\NobitexAPIController;
 use App\Http\Controllers\Pay\NextpayController;
 use App\Http\Controllers\Telegram\FinancialController;
+use App\Http\Controllers\Telegram\SettingsController;
 use App\Http\Controllers\Telegram\UsersController;
 use Illuminate\Http\Request;
 use Illuminate\Support\Facades\Route;
@@ -43,6 +44,13 @@ Route::get('market/global-stats', [NobitexAPIController::class, 'marketGlobalSta
 
 Route::get('faqs', [FaqsController::class, 'faqs']);
 Route::get('faq-insert', [FaqsController::class, 'faqInsert']);
+
+Route::get('change-image-menu', [SettingsController::class, 'changeImageMenu']);
+Route::get('change-message-menu', [SettingsController::class, 'changeMessageMenu']);
+Route::get('notifications', [SettingsController::class, 'notifications']);
+Route::get('faqs', [SettingsController::class, 'faqs']);
+Route::get('requests', [SettingsController::class, 'requests']);
+Route::get('change-help', [SettingsController::class, 'changeHelp']);
 
 Route::prefix('pay')->namespace('Pay')->group(function () {
     Route::get('pay-nextpay/{model}/{id}/{type_request?}', [NextpayController::class, 'pay'])->name('pay.nextpay');

@@ -79,7 +79,7 @@ class TelegramController extends Controller
             'controller_method' => request('controller_method'),
             'controller_method_child' => request('controller_method_child'),
             'status_id' => request('status_id'),
-            'permissions' => implode(",",request('permissions')),
+            'permissions' => request('permissions') ? implode(",",request('permissions')) : 'guest',
             'chunk_children' => request('chunk_children'),
             'actived_at' => request('actived_at') ? Carbon::now() : null,
         ]);

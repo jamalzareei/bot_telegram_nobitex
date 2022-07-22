@@ -66,11 +66,32 @@ class TelegramService
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text &reply_markup=$reply_markup&parse_mode=html");
         return $res->json();
     }
+
+    public function sendPhoto($chatId, $text, $photo, $reply_markup = null)
+    {
+        $text = urlencode($text);
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendPhoto?chat_id=$chatId&photo=$photo&caption=$text&reply_markup=$reply_markup&parse_mode=html");
+        return $res->json();
+    }
     
     public function sendMessageReply($chatId, $text, $reply_to_message_id, $reply_markup = null)
     {
         $text = urlencode($text);
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text &reply_to_message_id=$reply_to_message_id&reply_markup=$reply_markup&parse_mode=html");
+        return $res->json();
+    }
+
+    public function getFile($file_id)
+    {
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/getFile?file_id=$file_id");
+        return $res->json();
+    }
+    
+    public function getFilePath($file_path)
+    {
+        return "https://api.telegram.org/file/bot" . config('telegram.token') . "/$file_path";
+        ///
+        $res = Http::get("https://api.telegram.org/file/bot" . config('telegram.token') . "/$file_path");
         return $res->json();
     }
 
@@ -153,7 +174,7 @@ class TelegramService
         $result['lastname'] = $data['message']['chat']['last_name'] ?? $data['callback_query']['message']['chat']['last_name'] ?? '';
         $result['username'] = $data['message']['chat']['username'] ?? $data['callback_query']['message']['chat']['username'] ?? '';
         $result['message_id'] = $data['message']['message_id'] ?? $data['callback_query']['message']['message_id'] ?? 0;
-        $result['file_id'] = $data['message']['photo'][0]['file_id'] ?? $data['callback_query']['message']['photo'][0]['file_id'] ?? '';
+        $result['file_id'] = $data['message']['photo'][1]['file_id'] ?? $data['callback_query']['message']['photo'][0]['file_id'] ?? '';
         
         $result['data_query'] = $data['callback_query']['data'] ?? '';
         $result['callback_query_id'] = $data['callback_query']['id'] ?? '';

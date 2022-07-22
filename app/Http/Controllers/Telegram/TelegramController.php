@@ -89,6 +89,9 @@ class TelegramController extends Controller
         $this->telService->saveBot($data, $keyTelegram);
 
         MainService::saveRequestInFile();
+        if($keyTelegram->method_telegram == 'sendPhoto'){
+            return $this->telService->sendPhoto($chat_id, $text, $keyTelegram->file, $replyMarkup);
+        }
         $this->telService->sendMessage($chat_id, $text, $replyMarkup);
 
     }

@@ -38,6 +38,8 @@ class FinancialController extends Controller
             'amount'            => $data['message'],
             'actived_at'        => null,
         ]);
+        
+        MainService::saveNotification($user->id, 1, 'App\Models\Request', $requestModel->id, 'ثبت درخواست پرداخت', "کاربر با شماره $user->phone درخواست پرداخت جدیدی با مبلغ $requestModel->amount ریال ثبت نمود.");
         // save request
 
         $reply_markup = json_encode([
@@ -92,6 +94,7 @@ class FinancialController extends Controller
             'actived_at'        => null,
         ]);
         // save request
+        MainService::saveNotification($user->id, 1, 'App\Models\Request', $requestModel->id, 'ثبت درخواست برداشت', "کاربر با شماره $user->phone درخواست برداشت جدیدی با مبلغ $requestModel->amount ریال ثبت نمود.");
 
         $reply_markup = null;
         $text = "

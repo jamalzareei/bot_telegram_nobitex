@@ -2,6 +2,7 @@
 
 namespace App\Services;
 
+use App\Models\Notification;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Route;
 use Hekmatinasser\Verta\Facades\Verta;
@@ -128,5 +129,17 @@ class MainService
         if (($ret < 2 && $ret == $parity) || ($ret >= 2 && $ret == 11 - $parity))
             return true;
         return false;
+    }
+
+    public static function saveNotification($sender_id, $receiver_id, $notificationable_type, $notificationable_id, $title, $message)
+    {
+        Notification::create([
+            'sender_id' => $sender_id,
+            'receiver_id' => $receiver_id,
+            'notificationable_type' => $notificationable_type,
+            'notificationable_id' => $notificationable_id,
+            'title' => $title,
+            'message' => $message,
+        ]);
     }
 }

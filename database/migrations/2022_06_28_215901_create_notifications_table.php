@@ -23,6 +23,7 @@ class CreateNotificationsTable extends Migration
             $table->nullableMorphs('notificationable');
             $table->string('title');
             $table->text('message');
+            $table->timestamp("readed_at")->nullable();
             $table->timestamps();
             $table->softDeletes();
         });

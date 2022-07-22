@@ -5,6 +5,7 @@ namespace App\Http\Controllers\API;
 use App\Http\Controllers\Controller;
 use App\Models\Faq;
 use App\Models\User;
+use App\Services\MainService;
 use App\Services\TelegramService;
 use Illuminate\Http\Request;
 
@@ -44,6 +45,8 @@ class FaqsController extends Controller
         ]);
         
         $this->telService->saveBot($data, null);
+        
+        MainService::saveNotification($user->id, 1, 'App\Models\Faq', $faq->id, 'سوال پشتیبانی و سوالات متداول', "کاربر با شماره $user->phone سوال جدیدی مطرح نموده است");
 
         $text = 'سوال شما دریافت شد';
         $this->telService->sendMessageReply($data['chat_id'], $text, $data['message_id'], null);

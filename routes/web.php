@@ -27,6 +27,7 @@ Route::get('/migrate', function () {
 });
 
 Route::get('/cache', function () {
+    // return Artisan::call('storage:link');
     Artisan::call('cache:clear');
     Artisan::call('route:clear');
     Artisan::call('view:clear');
@@ -48,3 +49,8 @@ Route::post('post-registration', [AuthController::class, 'postRegistration'])->n
 Route::get('dashboard', [AuthController::class, 'dashboard'])->name('dashboard'); 
 Route::get('user-data', [AuthController::class, 'userData'])->name('user.data'); ; 
 Route::get('logout', [AuthController::class, 'logout'])->name('logout');
+
+
+Route::get('image', function (){
+    return asset('storage/upload/admin/file_1.jpg');
+});

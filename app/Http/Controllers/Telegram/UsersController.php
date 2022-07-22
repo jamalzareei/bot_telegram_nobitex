@@ -77,19 +77,21 @@ class UsersController extends Controller
         $data = $this->telService->getDataTelegram();
 
         if (!is_numeric($data['message'])) {
-            $this->telService->sendMessage($data['chat_id'], 'کد تایید اشتباه است.', null);
+            $this->telService->sendMessage($data['chat_id'], '- کد تایید اشتباه است.', null);
             return  false;
         }
 
         $user = User::where('chat_id', $data['chat_id'])->first();
         if ($data['message'] != $user->code_confirm) {
-            $this->telService->sendMessage($data['chat_id'], 'کد تایید اشتباه است.', null);
+            $this->telService->sendMessage($data['chat_id'], '-- کد تایید اشتباه است. ', null);
             return  false;
         }
         $user->login_telegram = 1;
         $user->code_confirm = null;
         $user->phone_verified_at = Carbon::now();
         $user->save();
+
+        MainService::saveNotification($user->id, 1, 'App\Models\User', $user->id, 'ورود کاربر', "کاربر با شماره $user->phone وارد حساب کاربری شد.");
 
         $this->telService->sendMessage($data['chat_id'], 'شما با موفقیت وارد حساب کاربری خود شدید.', null);
 
@@ -173,13 +175,18 @@ class UsersController extends Controller
             $card->deleted_at = Carbon::now();
             $card->actived_at = null;
             $card->save();
+            $this->telService->sendMessageReply($data['chat_id'], 'کارت حذف گردید.', $data['message_id'], null);
         }else{
-            Account::create([
+            $card = Account::updateOrCreate([
                 'user_id'=> $user->id,
                 'number'=> $data['message'],
                 'type_id' => '1', // type for cart
+            ],[
                 'actived_at' => Carbon::now()
             ]);
+            
+            MainService::saveNotification($user->id, 1, 'App\Models\Account', $card->id, 'ثبت کارت جدید', "کاربر با شماره $user->phone کارت جدیدی ثبت نمود.");
+            $this->telService->sendMessageReply($data['chat_id'], 'کارت ثبت گردید.', $data['message_id'], null);
         }
         
         $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
@@ -202,16 +209,23 @@ class UsersController extends Controller
             $card->deleted_at = Carbon::now();
             $card->actived_at = null;
             $card->save();
+
+            $this->telService->sendMessageReply($data['chat_id'], 'شبا حذف گردید.', $data['message_id'], null);
         }else{
-            Account::create([
+            $card = Account::updateOrCreate([
                 'user_id'=> $user->id,
                 'number'=> $data['message'],
                 'type_id' => '2', // type for shaba
+            ],[
                 'actived_at' => Carbon::now()
             ]);
+            
+            MainService::saveNotification($user->id, 1, 'App\Models\Account', $card->id, 'ثبت شبا جدید', "کاربر با شماره $user->phone شبا جدیدی ثبت نمود.");
+            
+            $this->telService->sendMessageReply($data['chat_id'], 'شبا ثبت گردید.', $data['message_id'], null);
         }
         
-        $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
+        $this->telService->sendMessageFromControllers($data, 'لیست شبا');
     }
 
     public function confirmAccount()
@@ -219,6 +233,10 @@ class UsersController extends Controller
         $data = $this->telService->getDataTelegram();
 
         $this->telService->answerCallbackQuery($data['callback_query_id'], 'اطلاعات حساب شما تکمیل نمیباشد', $url = null);
+
+        
+        $user = User::where('chat_id', $data['chat_id'])->first();
+        MainService::saveNotification($user->id, 1, '', '', 'تایید هویت کاربر', "کاربر با شماره $user->phone تایید هویت گردید.");
         // $this->telService->sendMessage($data['chat_id'], $data['callback_query_id'] , null);
         // $this->telService->sendMessageFromControllers($data, 'در حال تایید اطلاعات حساب شما');
     }
