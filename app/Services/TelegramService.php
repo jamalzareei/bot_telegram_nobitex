@@ -103,14 +103,19 @@ class TelegramService
         return $replyMarkup;
     }
     
-    public function getKeyTelegram($callback_data)
+    public function getKeyTelegram($callback_data, $chat_id = null)
     {
+        $permissions = "admin"; // admin
+        if (in_array($chat_id, config('telegram.chat_id_admins'))){
+            $permissions = "aaaa";
+        }
         return KeyboradTelegram::where('callback_data', $callback_data)
             ->with([
-                'children' => function ($queryChild) {
-                    $queryChild->select('id', 'text', 'callback_data', 'parent_id');
+                'children' => function ($queryChild) use($permissions) {
+                    $queryChild->select('id', 'text', 'callback_data', 'parent_id')->where('permissions', 'not like', "%$permissions%");
                 }
             ])
+            ->where('permissions', 'not like', "%$permissions%")
             ->first();
     }
 
@@ -183,7 +188,7 @@ class TelegramService
     public function sendMessageFromControllers($data, $callback_data, $methodName = 'sendMessage')
     {
         # code...
-        $keyTelegram = $this->getKeyTelegram($callback_data);
+        $keyTelegram = $this->getKeyTelegram($callback_data, $data['chat_id']);
         
         $this->saveBot($data, $keyTelegram);
 

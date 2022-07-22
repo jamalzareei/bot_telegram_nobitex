@@ -149,6 +149,7 @@
                         <select name="permissions[]" multiple="multiple" class="form-control select2" id="permissions">
                             <option value="guest">guest</option>
                             <option value="login">login</option>
+                            <option value="admin">admin</option>
                         </select>
                     </div>
 

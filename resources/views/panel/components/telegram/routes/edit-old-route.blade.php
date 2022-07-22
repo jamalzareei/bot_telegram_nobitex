@@ -181,6 +181,7 @@
                         <select name="permissions[]" multiple="multiple" class="form-control select2" id="permissions">
                             <option value="guest" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'guest') !== false)) ? 'selected' : '' }}>guest</option>
                             <option value="login" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'login') !== false)) ? 'selected' : '' }}>login</option>
+                            <option value="admin" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'admin') !== false)) ? 'selected' : '' }}>admin</option>
                         </select>
                     </div>
 

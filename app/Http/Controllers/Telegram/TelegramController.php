@@ -42,13 +42,13 @@ class TelegramController extends Controller
         $checkSubescrybe  = $this->telService->getChatMember('@jamalzareie', $data['from_id']);// creator و left,  member
         if($checkSubescrybe['result']['status'] == 'left'){
             $this->telService->saveBot($data, null);
-            return $this->telService->sendMessage($chat_id, 'شما عضو ربات تلگرام نیستید. @jamalzareie', null);
+            return $this->telService->sendMessage($chat_id, 'شما عضو کانال تلگرام نیستید. @jamalzareie', null);
         }
         
-        $keyTelegram = $this->telService->getKeyTelegram($message);
+        $keyTelegram = $this->telService->getKeyTelegram($message, $chat_id);
 
         if ($keyTelegram && $keyTelegram->same_callback_data) {
-            $keyTelegram = $this->telService->getKeyTelegram($keyTelegram->same_callback_data);
+            $keyTelegram = $this->telService->getKeyTelegram($keyTelegram->same_callback_data, $chat_id);
         }
 
         $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
@@ -59,7 +59,7 @@ class TelegramController extends Controller
         $login = false;
         if( $keyTelegram && $keyTelegram->permissions && (strpos($keyTelegram->permissions, 'login') !== false) && !$dataUser['user'] ){
             $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['2'=>$keyTelegram]), null);
-            $keyTelegram = $this->telService->getKeyTelegram('ورود به حساب کاربری');
+            $keyTelegram = $this->telService->getKeyTelegram('ورود به حساب کاربری', $chat_id);
         }
         ///////////login ///////////////
         
@@ -67,7 +67,7 @@ class TelegramController extends Controller
 
             $keyTelegramOld = KeyboradTelegram::where('callback_data', $botOld->callback_data)->first();
 
-            $keyTelegram = $this->telService->getKeyTelegram($keyTelegramOld->callback_data);
+            $keyTelegram = $this->telService->getKeyTelegram($keyTelegramOld->callback_data, $chat_id);
             
             $this->telService->sendMessage(config('telegram.chanel_id'), json_encode(['3'=>$keyTelegram]), null);
 

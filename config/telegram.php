@@ -8,6 +8,7 @@ return [
     'group_id'              => -672687753,
     'chanel_id'             => -1001697519941,
     'bot_id'                => 926406689,
+    'chat_id_admins'        => [926406689],
     'apiNextPay'            => '41820c7e-6113-47fa-b42d-015eed9e183a',
 
     // https://nextpay.org/nx/docs-inquiry // doc estelam karbar
