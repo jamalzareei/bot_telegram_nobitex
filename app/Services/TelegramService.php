@@ -144,8 +144,8 @@ class TelegramService
     {
         $user = User::where('chat_id', $chat_id)->where('login_telegram', 1)->with('accounts')->first();
         
-        $listShaba = Account::where('number', 'like', '%IR%')->pluck('number')->toArray();//
-        $listCredit = Account::where('number', 'not like', '%IR%')->pluck('number')->toArray();
+        $listShaba = $user ? Account::where('number', 'like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;//
+        $listCredit = $user ? Account::where('number', 'not like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;
         $listWallet = $user ? FinancialService::inventoryCalculation($user->id) : null;
         return [
             'user'              => $user ? $user : null,
@@ -155,8 +155,8 @@ class TelegramService
             '{$phone}'          => $user->phone ?? '',
             '{$balance}'        => $user->balance ?? '0',
             '{$national_code}'  => $user->national_code ?? '0',
-            '{$listCredit}'     => implode("\n",$listCredit) ?? 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
-            '{$listShaba}'      => implode("\n",$listShaba) ?? 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
+            '{$listCredit}'     => $listCredit ? implode("\n",$listCredit) : 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
+            '{$listShaba}'      => $listShaba ? implode("\n",$listShaba) : 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
             '{$listWallet}'     => $listWallet['str'] ?? '',
             '{$balance}'        => $listWallet['balance'] ?? '',
             '{$faqsList}'       => $this->faqsList(),

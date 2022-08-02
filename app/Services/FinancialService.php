@@ -71,6 +71,9 @@ class FinancialService
         $wallets = Wallet::where('user_id', $user_id)->get();
         $data['str'] = " شرح حساب \n\n";
         $data['balance'] = 0;
+        if(!$wallets || $wallets->count() == 0){
+            $data['str'] .= "\n تراکنشی ثبت نگردیده است. \n";
+        }
         foreach ($wallets as $key => $wallet) {
             # code...
             $type = null;
