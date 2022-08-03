@@ -16,7 +16,11 @@ class TelegramService
         if ($chunk_children <= 0) $chunk_children = 2;
         return  json_encode([
             'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children),
-            //'remove_keyboard' => true
+            'remove_keyboard' => true,
+            'hide_keyboard' => true,
+            "one_time_keyboard" => true,
+            "ReplyKeyboardRemove" => [ "remove_keyboard" => true ],
+            "input_field_placeholder" => " خرید و فروش ارز",
         ]);
     }
 
@@ -29,7 +33,12 @@ class TelegramService
             }
         }
         return json_encode([
-            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true ,"remove_keyboard"=> true,// "remove_keyboard" => true
+            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children),
+            "resize_keyboard" => true,
+            "remove_keyboard"=> true,
+            'hide_keyboard' => true,
+            "one_time_keyboard" => true,
+            "input_field_placeholder" => " خرید و فروش ارز",
         ]);
     }
 

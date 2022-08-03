@@ -70,6 +70,8 @@ class UserAuthenticationController extends Controller
 
         ]);
         $path = null;//$this->baseUrlUpload . $file_path;
+        $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), json_encode($user), null);
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید. \n $path", $data['message_id'], null);
     }
 
@@ -95,6 +97,8 @@ class UserAuthenticationController extends Controller
 
         ]);
         $path = null;//$this->baseUrlUpload . $file_path;
+        $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), json_encode($user), null);
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید. \n $path", $data['message_id'], null);
     }
 
