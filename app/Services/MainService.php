@@ -137,7 +137,7 @@ class MainService
             'sender_id' => $sender_id,
             'receiver_id' => $receiver_id,
             'notificationable_type' => $notificationable_type,
-            'notificationable_id' => $notificationable_id,
+            'notificationable_id' => $notificationable_id ?? null,
             'title' => $title,
             'message' => $message,
         ]);

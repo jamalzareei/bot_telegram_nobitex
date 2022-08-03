@@ -29,7 +29,7 @@ class TelegramService
             }
         }
         return json_encode([
-            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true ,// "remove_keyboard" => true
+            "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children), "resize_keyboard" => true ,"remove_keyboard"=> true,// "remove_keyboard" => true
         ]);
     }
 
@@ -84,6 +84,7 @@ class TelegramService
     public function getFile($file_id)
     {
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/getFile?file_id=$file_id");
+        // "https://api.telegram.org/bot5409689822:AAGNeNsImZCV6NTgRGp2ULXzcz1zPzDjAB4/getFile?file_id=BAACAgQAAxkBAAIMTmLq31OgCMBEla-gft34au5B88HUAAKSCwAC6zNZU3JpbJclG1qTKQQ
         return $res->json();
     }
     
@@ -98,6 +99,12 @@ class TelegramService
     public function sendChatAction($chatId, $action)
     {
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendChatAction?chat_id=$chatId&action=$action");
+        return $res->json();
+    }
+    
+    public function forwardMessage($chatId, $from_chat_id, $message_id)
+    {
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/forwardMessage?chat_id=$chatId&from_chat_id=$from_chat_id&message_id=$message_id");
         return $res->json();
     }
 
@@ -174,7 +181,14 @@ class TelegramService
         $result['lastname'] = $data['message']['chat']['last_name'] ?? $data['callback_query']['message']['chat']['last_name'] ?? '';
         $result['username'] = $data['message']['chat']['username'] ?? $data['callback_query']['message']['chat']['username'] ?? '';
         $result['message_id'] = $data['message']['message_id'] ?? $data['callback_query']['message']['message_id'] ?? 0;
-        $result['file_id'] = $data['message']['photo'][1]['file_id'] ?? $data['callback_query']['message']['photo'][0]['file_id'] ?? '';
+        $result['file_id'] = 
+            $data['message']['photo'][0]['file_id'] ?? 
+            $data['callback_query']['message']['photo'][1]['file_id'] ?? 
+            $data['message']['document']['thumb']['file_id'] ?? 
+            $data['message']['video']['file_id'] ?? 
+            '';
+        $result['document_id'] = $data['message']['document']['thumb']['file_id'] ?? '';
+        $result['video_id'] = $data['message']['video']['file_id'] ?? '';
         
         $result['data_query'] = $data['callback_query']['data'] ?? '';
         $result['callback_query_id'] = $data['callback_query']['id'] ?? '';
@@ -191,7 +205,7 @@ class TelegramService
             'chat_id' => $data['chat_id'],
             'message' => $data['message'],
             'message_id' => $data['message_id'],
-            'file_id' => $data['file_id'],
+            'file_id' => $data['file_id'] ?? $data['document_id'],
             'callback_query_id' => $data['callback_query_id'] ?? null,
             'next_answer' => $keyTelegram->next_callback_data ?? '',
             'callback_data' => $keyTelegram->callback_data ?? '',

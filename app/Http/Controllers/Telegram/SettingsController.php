@@ -31,7 +31,7 @@ class SettingsController extends Controller
     {
         # code...
         $data = $this->telService->getDataTelegram();
-        $file_id = $data['file_id'];
+        $file_id = $data['file_id'] ?? $data['document_id'];
         
         $key = KeyboradTelegram::where('callback_data', '/start')->first();
         $key->file = $file_id;

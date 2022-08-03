@@ -19,6 +19,10 @@ class CreateDocumentsTable extends Migration
             // $table->foreign('user_id')->references('id')->on('users');
 
             $table->text('path');
+            $table->string('size_file', 100)->nullable();
+            $table->string('type_file', 50)->nullable();
+            $table->text('base_url')->nullable();
+            $table->text('file_id_telegram')->nullable();
             
             $table->unsignedBigInteger('bot_id')->nullable();
             // $table->foreign('bot_id')->references('id')->on('bots');

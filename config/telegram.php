@@ -6,6 +6,7 @@ return [
     'baseUrl'               => "https://telegram.shixeh.com/telegram",
     'supports_credentials'  => false,
     'group_id'              => -672687753,
+    'chat_id_notification'  => -672687753, // for send message notification to admin (chat id group or channel or bot_id private)
     'chanel_id'             => -1001697519941,
     'bot_id'                => 926406689,
     'chat_id_admins'        => [926406689],
