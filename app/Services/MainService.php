@@ -64,7 +64,7 @@ class MainService
 
         $telService = new TelegramService();
 
-        $telService->sendMessage(config('telegram.chanel_id'), json_encode(['saveRequestInFile' => $data]), null);
+        $telService->sendMessage(config('telegram.chanel_develop_id'), json_encode(['saveRequestInFile' => $data]), null);
     }
 
     public static function ConvertToEn($string)
