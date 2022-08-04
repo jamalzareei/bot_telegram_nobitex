@@ -4,6 +4,7 @@ use App\Http\Controllers\Panel\FaqsController;
 use App\Http\Controllers\Panel\StatusesController;
 use App\Http\Controllers\Panel\TelegramController;
 use App\Http\Controllers\Panel\TypesController;
+use App\Http\Controllers\Panel\UserController;
 use Illuminate\Support\Facades\Route;
 
 Route::get('/', function () {
@@ -35,6 +36,13 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::post('/faqs/add', [FaqsController::class, 'add'])->name('panel.faq.add');
     Route::get('/faqs/edit', [FaqsController::class, 'edit'])->name('panel.faq.edit');
     Route::post('/faqs/update', [FaqsController::class, 'update'])->name('panel.faq.update');
+
+    
+    Route::get('/list-list', [UserController::class, 'list'])->name('panel.users.list');
+    Route::post('/user/send-code-confirm/{id}', [UserController::class, 'sendConfirmCode'])->name('panel.user.send.code.confirm');
+    // Route::post('/faqs/add', [UserController::class, 'add'])->name('panel.faq.add');
+    // Route::get('/faqs/edit', [UserController::class, 'edit'])->name('panel.faq.edit');
+    // Route::post('/faqs/update', [UserController::class, 'update'])->name('panel.faq.update');
     
 });
 

@@ -6,6 +6,7 @@ use App\Http\Controllers\Controller;
 use App\Models\Account;
 use App\Models\User;
 use App\Services\MainService;
+use App\Services\SmsService;
 use App\Services\TelegramService;
 use Carbon\Carbon;
 use Illuminate\Support\Facades\Hash;
@@ -64,7 +65,8 @@ class UsersController extends Controller
         $user->code_confirm = $codeConfirm;
         $user->save();
 
-        ////
+        // send text message to user
+        $sms = SmsService::sendMessageCode( $user->phone, $user->code_confirm );
 
         $this->telService->sendMessageFromControllers($data, 'کد تایید');
 

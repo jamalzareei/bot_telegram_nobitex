@@ -10,7 +10,9 @@ return [
     'chanel_id'             => -1001697519941,
     'bot_id'                => 926406689,
     'chat_id_admins'        => [926406689],
-    'apiNextPay'            => '41820c7e-6113-47fa-b42d-015eed9e183a',
+    'apiNextPay'            => 'f2a302a0-0040-4538-bb63-2296ec3241a8',//'41820c7e-6113-47fa-b42d-015eed9e183a',
+    'token_smsir'           => 'KwoS2hhnO6ePcn2gl4LwdsnlmvYV5RKjw361FcMelaiCAR584hoHavHlhWi3V1ez',
+    'number_smsir'          => '30007732002863',
 
     // https://nextpay.org/nx/docs-inquiry // doc estelam karbar
     //09159217026 //Ss5231046! // etla'at vorod b nextpay

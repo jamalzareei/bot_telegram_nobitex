@@ -16,8 +16,10 @@ class TelegramService
         if ($chunk_children <= 0) $chunk_children = 2;
         return  json_encode([
             'inline_keyboard' => array_chunk(array_values($arrayInlineKeyboards), $chunk_children),
+            // 'keyboard' => [[["text" => "بازگشت",]]],
             'remove_keyboard' => true,
             'hide_keyboard' => true,
+            "resize_keyboard" => true,
             "one_time_keyboard" => true,
             "ReplyKeyboardRemove" => [ "remove_keyboard" => true ],
             "input_field_placeholder" => " خرید و فروش ارز",

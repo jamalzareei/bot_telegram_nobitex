@@ -33,17 +33,17 @@
                 </a>
                 <ul class="menu-content">
                     <li>
-                        <a href="app-user-list.html">
+                        <a href="{{ route('panel.users.list') }}">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item">لیست</span>
                         </a>
                     </li>
-                    <li>
+                    {{-- <li>
                         <a href="app-user-view.html">
                             <i class="feather icon-circle"></i>
                             <span class="menu-item">کاربر جدید</span>
                         </a>
-                    </li>
+                    </li> --}}
                 </ul>
             </li>
             <li class=" navigation-header"><span>Telegram</span>
