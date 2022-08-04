@@ -161,23 +161,40 @@ class TelegramService
     public function getUserData($chat_id, $message)
     {
         $user = User::where('chat_id', $chat_id)->where('login_telegram', 1)->with('accounts')->first();
+        $listCredit_ = 'هنوز کارتی وارد نشده است'; $listShaba_ = 'هنوز شماره شبا وارد نشده است'; $listWalletStr = ''; $listWalletBalance = ''; $faqsList = '';
+
+        if($message == 'برداشت موجودی' || $message == 'مالی'){
+            $listWallet = $user ? FinancialService::inventoryCalculation($user->id) : null;
+            $listWalletStr = $listWallet['str'] ?? '';
+            $listWalletBalance = $listWallet['balance'] ?? '';
+        }
+
+        if($message == 'لیست کارت ها'){
+            $listCredit = $user ? Account::where('number', 'not like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;
+            $listCredit_ = $listCredit ? implode("\n",$listCredit) : 'هنوز کارتی وارد نشده است';
+        }
         
-        $listShaba = $user ? Account::where('number', 'like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;//
-        $listCredit = $user ? Account::where('number', 'not like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;
-        $listWallet = $user ? FinancialService::inventoryCalculation($user->id) : null;
+        if($message == 'لیست شبا'){
+            $listShaba = $user ? Account::where('number', 'like', '%IR%')->where('user_id', $user->id)->pluck('number')->toArray() : null;//
+            $listShaba_ = $listShaba ? implode("\n",$listShaba) : 'هنوز شماره شبا وارد نشده است';
+        }
+
+        if($message == 'سوالات متداول'){
+            $faqsList = $this->faqsList();
+        }
         return [
             'user'              => $user ? $user : null,
             '{$firstname}'      => $user->firstname ?? '',
             '{$lastname}'       => $user->lastname ?? '',
             '{$birthday}'       => $user->birth_date_fa ?? '',
             '{$phone}'          => $user->phone ?? '',
-            '{$balance}'        => $user->balance ?? '0',
+            '{$authenticationUser}' => $user->authenticate_user ? '✅ حساب شما تایید شده است ✅' : '❌ حساب شما هنوز تایید هویت نشده است ❌ ', // احراز هویت
             '{$national_code}'  => $user->national_code ?? '0',
-            '{$listCredit}'     => $listCredit ? implode("\n",$listCredit) : 'هنوز کارتی وارد نشده است',//json_encode($listCredit)
-            '{$listShaba}'      => $listShaba ? implode("\n",$listShaba) : 'هنوز شماره شبا وارد نشده است',//json_encode($listShaba)
-            '{$listWallet}'     => $listWallet['str'] ?? '',
-            '{$balance}'        => $listWallet['balance'] ?? '',
-            '{$faqsList}'       => $this->faqsList(),
+            '{$listCredit}'     => $listCredit_,//لیست کارت ها
+            '{$listShaba}'      => $listShaba_,//لیست شبا
+            '{$listWallet}'     => $listWalletStr,//مالی
+            '{$balance}'        => $listWalletBalance,//برداشت موجودی
+            '{$faqsList}'       => $faqsList,//سوالات متداول
         ];
     }
 

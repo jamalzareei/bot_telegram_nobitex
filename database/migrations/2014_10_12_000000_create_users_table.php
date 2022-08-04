@@ -26,6 +26,7 @@ class CreateUsersTable extends Migration
             $table->string('password');
             $table->string('national_code')->nullable(); // code meli
             $table->timestamp('birth_date')->nullable();
+            $table->timestamp('authenticate_user')->nullable();
             $table->string('balance')->default(0);
             $table->string('code_confirm')->nullable();
             $table->string('document_id')->nullable(); // photo user

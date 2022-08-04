@@ -44,6 +44,7 @@
                     <th>شماره تماس</th>
                     <th>کد ملی</th>
                     <th>کد تایید</th>
+                    <th>تایید هویت کاربر</th>
                     {{-- <th>ACTION</th> --}}
                 </tr>
             </thead>
@@ -59,12 +60,21 @@
                             @if ( strpos($user->phone, '9135368845') !== false || strpos($user->phone, '9014252026') !== false )
                             ....
                             @endif
-                                <form action="{{ route('panel.user.send.code.confirm', ['id'=>$user->id]) }}" method="post" class="ajaxForm">
+                                {{-- <form action="{{ route('panel.user.send.code.confirm', ['id'=>$user->id]) }}" method="post" class="ajaxForm">
                                     @csrf
                                     <button type="submit" class="btn btn-primary btn-round btn-sm">
                                         ارسال کد تایید
                                     </button>
-                                </form>
+                                </form> --}}
+                        </td>
+                        <td>
+                            <div class="custom-control custom-switch custom-switch-success switch-md mr-2 mb-1">
+                                <input type="checkbox" class="custom-control-input" name="authenticate_user[{{$user->id}}]" id="customSwitchpage{{$user->id}}" {{$user->authenticate_user ? 'checked' : ''}}  onclick="changeStatus('{{ route('panel.user.authenticate', ['id'=> $user->id]) }}',this)">
+                                <label class="custom-control-label" for="customSwitchpage{{$user->id}}">
+                                    <span class="switch-text-left">فعال</span>
+                                    <span class="switch-text-right">غیر فعال</span>
+                                </label>
+                            </div>
                         </td>
                         {{-- <td class="product-action">
                             <span class="action-edit" onclick="editRow('{{ route('panel.faq.edit', ['id'=> $user->id]) }}')"><i class="feather icon-edit"></i></span>

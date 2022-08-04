@@ -65,7 +65,7 @@ class NextpayController extends Controller
         $amount = $requestModel->amount;
         $callback_uri = route('callback.nextpay', ['pay_id'=> $pay->id, 'type_request' => $type_request]);
         $currency = $this->currency;
-        $customer_phone = $user->phone;// '09135368845';
+        $customer_phone = "0".substr($user->phone, -10);// '09135368845';
         // $custom_json_fields = '';
         $payer_name = $user->firsname.' '.$user->lastname;// 'test';
         $payer_desc = 'افزایش اعتبار';

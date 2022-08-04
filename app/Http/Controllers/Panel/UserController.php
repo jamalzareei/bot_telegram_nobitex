@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\SmsService;
+use Carbon\Carbon;
 
 class UserController extends Controller
 {
@@ -42,5 +43,20 @@ class UserController extends Controller
             'status' => 'error',
             'data' => '',
         ], 200);
+    }
+
+    public function authenticateUser($id)
+    {
+        $user = User::find($id);
+        $user->authenticate_user = request('status') == 'true' ? Carbon::now() : null;
+        $user->save();
+
+        return response()->json([
+            'title' => '',
+            'message' => 'تغییر هویت کاربر با موفقیت ثبت گردید',
+            'status' => 'success',
+            'data' => '',
+        ], 200);
+        return request('status');
     }
 }
