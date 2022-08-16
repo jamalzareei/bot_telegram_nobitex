@@ -6,17 +6,22 @@ use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\SmsService;
 use Carbon\Carbon;
+use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
 {
     public function list()
     {
         $title = request('title');
-        $users = User::all();
+        $users = User::with('roles')->get();
+        $roles = Role::all();
+
+        // return $users[0]->roles->where('id', 2)->count();
          
         return view('panel.pages.users.list', [
             'title'                 => 'کاربران',
             'users'                 => $users,
+            'roles'                 => $roles,
             'breadcrumb'            => null
         ]);
     }
@@ -58,5 +63,21 @@ class UserController extends Controller
             'data' => '',
         ], 200);
         return request('status');
+    }
+
+    public function rolesSync($id)
+    {
+        // return request()->all();
+        $user = User::find($id);
+
+        $user->syncRoles(request('roles'));
+
+        
+        return response()->json([
+            'title' => '',
+            'message' => 'successfully',
+            'status' => 'success',
+            'data' => '',
+        ], 200);
     }
 }

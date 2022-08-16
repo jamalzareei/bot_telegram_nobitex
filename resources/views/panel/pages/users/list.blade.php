@@ -45,7 +45,7 @@
                     <th>کد ملی</th>
                     <th>کد تایید</th>
                     <th>تایید هویت کاربر</th>
-                    {{-- <th>ACTION</th> --}}
+                    <th>ROLES</th>
                 </tr>
             </thead>
             <tbody>
@@ -76,9 +76,28 @@
                                 </label>
                             </div>
                         </td>
-                        {{-- <td class="product-action">
-                            <span class="action-edit" onclick="editRow('{{ route('panel.faq.edit', ['id'=> $user->id]) }}')"><i class="feather icon-edit"></i></span>
-                        </td> --}}
+                        <td class="product-action">
+                                <form action="{{ route('panel.user.roles.sync', ['id'=>$user->id]) }}" method="post" class="row ajaxForm">
+                                    <div class="form-group col-8">
+
+                                        <select name="roles[]" multiple="multiple" class="form-control select2" id="roles{{ $user->id }}">
+                                            <option value="">انتخاب کنید</option>
+                                            @forelse ($roles as $role)
+                                                <option value="{{ $role->id }}" {{ ($user->roles->where('id', $role->id)->count() ?? null) ? 'selected' : '' }}>
+                                                    {{ $role->name }}
+                                                </option>                                            
+                                            @empty
+                                                
+                                            @endforelse
+                                        </select>
+                                    </div>
+                                    <div class="col-3">
+                                        <button type="submit" class="btn btn-icon btn-icon rounded-circle btn-flat-success mr-1 mb-1 waves-effect waves-light">
+                                            <i class="feather icon-save"></i>
+                                        </button>
+                                    </div>
+                                </form>
+                        </td>
                     </tr>
                 @empty
                     

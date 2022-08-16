@@ -43,6 +43,7 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/list-list', [UserController::class, 'list'])->name('panel.users.list');
     Route::post('/user/send-code-confirm/{id}', [UserController::class, 'sendConfirmCode'])->name('panel.user.send.code.confirm');
     Route::post('/user/authentication/{id}', [UserController::class, 'authenticateUser'])->name('panel.user.authenticate');
+    Route::post('/user/roles/sync/{id}', [UserController::class, 'rolesSync'])->name('panel.user.roles.sync');
     // Route::post('/faqs/add', [UserController::class, 'add'])->name('panel.faq.add');
     // Route::get('/faqs/edit', [UserController::class, 'edit'])->name('panel.faq.edit');
     // Route::post('/faqs/update', [UserController::class, 'update'])->name('panel.faq.update');
