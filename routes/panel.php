@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Panel\FaqsController;
+use App\Http\Controllers\Panel\SettingsController;
 use App\Http\Controllers\Panel\StatusesController;
 use App\Http\Controllers\Panel\TelegramController;
 use App\Http\Controllers\Panel\TypesController;
@@ -44,6 +45,11 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     // Route::post('/faqs/add', [UserController::class, 'add'])->name('panel.faq.add');
     // Route::get('/faqs/edit', [UserController::class, 'edit'])->name('panel.faq.edit');
     // Route::post('/faqs/update', [UserController::class, 'update'])->name('panel.faq.update');
+
+    Route::get('/settings-list', [SettingsController::class, 'list'])->name('panel.settings.list');
+    Route::post('/settings/add', [SettingsController::class, 'add'])->name('panel.settings.add.setting');
+    Route::get('/settings/edit', [SettingsController::class, 'edit'])->name('panel.settings.edit.setting');
+    Route::post('/settings/update', [SettingsController::class, 'update'])->name('panel.settings.update.setting');
     
 });
 

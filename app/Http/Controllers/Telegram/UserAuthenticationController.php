@@ -20,6 +20,12 @@ class UserAuthenticationController extends Controller
         $this->baseUrlUpload = "https://api.telegram.org/file/bot" . config('telegram.token') . "/";
     }
 
+    public function detailsUser($user, $type)
+    {
+        return "#$type \n نام: $user->firstname $user->lastname \n ایمیل: $user->email \n شماره تماس: $user->phone \n"
+        ;
+    }
+
     public function uploadImageNatinal()
     {
         $data = $this->telService->getDataTelegram();
@@ -42,8 +48,9 @@ class UserAuthenticationController extends Controller
         ]);
         $path = null;// $this->baseUrlUpload . $file_path;
         $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
-        $this->telService->sendMessage(config('telegram.chat_id_notification'), json_encode($user), null);
-        
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), $this->detailsUser($user, 'عکس_کارت_ملی'), null);
+        // $this->telService->sendPhoto(config('telegram.chat_id_notification'), $this->detailsUser($user, 'عکس_کارت_ملی'), $file_id, $reply_markup = null);
+
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید.", $data['message_id'], null);
 
     }
@@ -71,7 +78,8 @@ class UserAuthenticationController extends Controller
         ]);
         $path = null;//$this->baseUrlUpload . $file_path;
         $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
-        $this->telService->sendMessage(config('telegram.chat_id_notification'), json_encode($user), null);
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), $this->detailsUser($user, 'عکس_سلفی'), null);
+        // $this->telService->sendPhoto(config('telegram.chat_id_notification'), $this->detailsUser($user, 'عکس_سلفی'), $file_id, $reply_markup = null);
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید. \n $path", $data['message_id'], null);
     }
 
@@ -98,7 +106,9 @@ class UserAuthenticationController extends Controller
         ]);
         $path = null;//$this->baseUrlUpload . $file_path;
         $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
-        $this->telService->sendMessage(config('telegram.chat_id_notification'), json_encode($user), null);
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), $this->detailsUser($user, 'ویدئو_سلفی'), null);
+        // $this->telService->sendPhoto(config('telegram.chat_id_notification'), $this->detailsUser($user, 'ویدئو_سلفی'), $file_id, $reply_markup = null);
+
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید. \n $path", $data['message_id'], null);
     }
 
