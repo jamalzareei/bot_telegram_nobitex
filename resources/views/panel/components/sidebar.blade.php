@@ -47,6 +47,12 @@
                 </ul>
             </li>
             <li class=" nav-item">
+                <a href="{{ route('panel.roles.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">سطح کاربران</span>
+                </a>
+            </li>
+            <li class=" nav-item">
                 <a href="{{ route('panel.settings.list') }}">
                     <i class="feather icon-mail"></i>
                     <span class="menu-title" data-i18n="Email">تنظیمات</span>

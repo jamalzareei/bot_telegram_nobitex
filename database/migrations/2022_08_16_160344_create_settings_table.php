@@ -25,7 +25,7 @@ class CreateSettingsTable extends Migration
 
         
         Schema::table('roles', function (Blueprint $table) {
-            $table->integer('details')->nullable();
+            $table->text('details')->nullable();
         });
     }
 

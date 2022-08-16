@@ -1,6 +1,7 @@
 <?php
 
 use App\Http\Controllers\Panel\FaqsController;
+use App\Http\Controllers\Panel\RoleController;
 use App\Http\Controllers\Panel\SettingsController;
 use App\Http\Controllers\Panel\StatusesController;
 use App\Http\Controllers\Panel\TelegramController;
@@ -50,6 +51,12 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::post('/settings/add', [SettingsController::class, 'add'])->name('panel.settings.add.setting');
     Route::get('/settings/edit', [SettingsController::class, 'edit'])->name('panel.settings.edit.setting');
     Route::post('/settings/update', [SettingsController::class, 'update'])->name('panel.settings.update.setting');
+
+    
+    Route::get('/roles-list', [RoleController::class, 'list'])->name('panel.roles.list');
+    Route::post('/roles/add', [RoleController::class, 'add'])->name('panel.roles.add.role');
+    Route::get('/roles/edit', [RoleController::class, 'edit'])->name('panel.roles.edit.role');
+    Route::post('/roles/update', [RoleController::class, 'update'])->name('panel.roles.update.role');
     
 });
 
