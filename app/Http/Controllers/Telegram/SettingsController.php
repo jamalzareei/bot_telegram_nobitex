@@ -141,4 +141,13 @@ class SettingsController extends Controller
         
         return $this->telService->sendMessageReply($data['chat_id'], "با موفقیت ذخیره گردید.", $data['message_id'], null);
     }
+
+    public function fetFileIdUploaded()
+    {
+        $data = $this->telService->getDataTelegram();
+        $file_id = $data['file_id'] ?? $data['document_id'];
+        # code...
+        return $this->telService->sendMessageReply($data['chat_id'], $file_id, $data['message_id'], null);
+
+    }
 }

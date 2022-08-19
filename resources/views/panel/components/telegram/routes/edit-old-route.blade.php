@@ -182,15 +182,21 @@
                             <option value="guest" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'guest') !== false)) ? 'selected' : '' }}>guest</option>
                             <option value="login" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'login') !== false)) ? 'selected' : '' }}>login</option>
                             <option value="admin" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, 'admin') !== false)) ? 'selected' : '' }}>admin</option>
+                            
+                            @forelse ($roles as $role)
+                                <option value="{{ $role->name }}" {{ ($keyboardTelegram && (strpos($keyboardTelegram->permissions, $role->name) !== false)) ? 'selected' : '' }}>{{ $role->name }}</option>
+                            @empty
+                                
+                            @endforelse
                         </select>
                     </div>
 
                     <div class="col-sm-12 data-field-col">
                         <div class="custom-control custom-switch custom-switch-success mr-2 mb-1">
                             <p class="mb-0">active</p>
-                            <input type="checkbox" name="actived_at" class="custom-control-input" id="actived_at"
-                                {{ ($keyboardTelegram && $keyboardTelegram->actived_at) ? 'checked' : '' }}>
-                            <label class="custom-control-label" for="actived_at">
+                            <input type="checkbox" name="actived_at" class="custom-control-input" id="actived_at{{ $keyboardTelegram->id }}"
+                                {{ ($keyboardTelegram && $keyboardTelegram->actived_at) ? 'checked=true' : '' }}>
+                            <label class="custom-control-label" for="actived_at{{ $keyboardTelegram->id }}">
                                 <span class="switch-icon-left"><i class="feather icon-check"></i></span>
                                 <span class="switch-icon-right"><i class="feather icon-times"></i></span>
                             </label>

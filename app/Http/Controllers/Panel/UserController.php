@@ -5,6 +5,7 @@ namespace App\Http\Controllers\Panel;
 use App\Http\Controllers\Controller;
 use App\Models\User;
 use App\Services\SmsService;
+use App\Services\TelegramService;
 use Carbon\Carbon;
 use Spatie\Permission\Models\Role;
 
@@ -55,6 +56,13 @@ class UserController extends Controller
         $user = User::find($id);
         $user->authenticate_user = request('status') == 'true' ? Carbon::now() : null;
         $user->save();
+
+        $telService = new TelegramService();
+        if(request('status') == 'true'){
+            $telService->sendMessage($user->chat_id, "\n\n✅✅✅✅✅✅ \n\n\n حساب کاربری شما تایید گردید. \n\n\n ✅✅✅✅✅✅\n\n", null);
+        }else{
+            // $telService->sendMessage($user->chat_id, "حساب شما غیر فعال گردید." null);
+        }
 
         return response()->json([
             'title' => '',

@@ -150,6 +150,11 @@
                             <option value="guest">guest</option>
                             <option value="login">login</option>
                             <option value="admin">admin</option>
+                            @forelse ($roles as $role)
+                                <option value="{{ $role->name }}">{{ $role->name }}</option>
+                            @empty
+                                
+                            @endforelse
                         </select>
                     </div>
 

@@ -8,6 +8,7 @@ use App\Models\Status;
 use App\Services\MainService;
 use Carbon\Carbon;
 use Illuminate\Http\Request;
+use Spatie\Permission\Models\Role;
 
 class TelegramController extends Controller
 {
@@ -25,6 +26,7 @@ class TelegramController extends Controller
             ->get();
         $keyboradTelegramsAll = KeyboradTelegram::all();
         $statuses = Status::all();
+        $roles = Role::all();
         $controllers = MainService::controllers();
 
         return view('panel.pages.telegram.routes', [
@@ -32,6 +34,7 @@ class TelegramController extends Controller
             'keyboradTelegrams'     => $keyboradTelegrams,
             'keyboradTelegramsAll'  => $keyboradTelegramsAll,
             'statuses'              => $statuses,
+            'roles'                 => $roles,
             'controllers'           => $controllers,
             'parent_id'             => $parent_id,
             'breadcrumb'            => null
@@ -171,11 +174,13 @@ class TelegramController extends Controller
         
         $keyboradTelegramsAll = KeyboradTelegram::all();
         $statuses = Status::all();
+        $roles = Role::all();
         $controllers = MainService::controllers();
 
         return view('panel.components.telegram.routes.edit-old-route', [
             'keyboradTelegramsAll'  => $keyboradTelegramsAll,
             'statuses'              => $statuses,
+            'roles'                 => $roles,
             'controllers'           => $controllers,
             'keyboardTelegram'      => $keyboardTelegram,
         ]);

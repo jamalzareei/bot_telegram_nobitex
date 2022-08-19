@@ -73,6 +73,9 @@ class TelegramService
         // <code>inline fixed-width code</code>
         // <pre>pre-formatted fixed-width code block</pre>
         // ';
+        if(!$reply_markup){//remove_keyboard
+            $reply_markup = $this->convertKeyboards([]);
+        }
         $text = urlencode($text);
         $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendMessage?chat_id=$chatId&text=$text &reply_markup=$reply_markup&parse_mode=html");
         return $res->json();
@@ -148,10 +151,10 @@ class TelegramService
         if (in_array($chat_id, config('telegram.chat_id_admins'))){
             $permissions = "aaaa";
         }
-        return KeyboradTelegram::where('callback_data', $callback_data)
+        return KeyboradTelegram::whereNotNull('actived_at')->where('callback_data', $callback_data)
             ->with([
                 'children' => function ($queryChild) use($permissions) {
-                    $queryChild->select('id', 'text', 'callback_data', 'parent_id')->where('permissions', 'not like', "%$permissions%");
+                    $queryChild->select('id', 'text', 'callback_data', 'parent_id')->whereNotNull('actived_at')->where('permissions', 'not like', "%$permissions%");
                 }
             ])
             ->where('permissions', 'not like', "%$permissions%")
@@ -188,7 +191,7 @@ class TelegramService
             '{$lastname}'       => $user->lastname ?? '',
             '{$birthday}'       => $user->birth_date_fa ?? '',
             '{$phone}'          => $user->phone ?? '',
-            '{$authenticationUser}' => $user->authenticate_user ? '✅ حساب شما تایید شده است ✅' : '❌ حساب شما هنوز تایید هویت نشده است ❌ ', // احراز هویت
+            '{$authenticationUser}' => ($user && $user->authenticate_user) ? '✅ حساب شما تایید شده است ✅' : '❌ حساب شما هنوز تایید هویت نشده است ❌ ', // احراز هویت
             '{$national_code}'  => $user->national_code ?? '0',
             '{$listCredit}'     => $listCredit_,//لیست کارت ها
             '{$listShaba}'      => $listShaba_,//لیست شبا

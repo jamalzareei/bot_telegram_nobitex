@@ -21,10 +21,10 @@ Route::get('/', [AuthController::class, 'dashboard'])->name('main');
 //     Artisan::call('migrate:fresh');
 //     return 'migrate-fresh';
 // });
-Route::get('/migrate', function () {
-    Artisan::call('migrate');
-    return 'migrate';
-});
+// Route::get('/migrate', function () {
+//     Artisan::call('migrate');
+//     return 'migrate';
+// });
 
 Route::get('/cache', function () {
     // return Artisan::call('storage:link');
