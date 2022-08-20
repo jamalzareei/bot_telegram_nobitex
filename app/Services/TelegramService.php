@@ -4,6 +4,7 @@ namespace App\Services;
 
 use App\Models\Account;
 use App\Models\Bot;
+use App\Models\Document;
 use App\Models\Faq;
 use App\Models\KeyboradTelegram;
 use App\Models\User;
@@ -141,13 +142,15 @@ class TelegramService
         return $res->json();
     }
 
-    public function generateMarkup($keyTelegram)
+    public function generateMarkup($keyTelegram, $chat_id = null)
     {
         $replyMarkup = null;
         if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'keyboard') {
             $replyMarkup = $this->convertKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
         } else if ($keyTelegram && $keyTelegram->children && $keyTelegram->children_type === 'inline_keyboard') {
-            $replyMarkup = $this->convertInlineKeyboards($keyTelegram->children->toArray(), $keyTelegram->chunk_children);
+            // $this->sendMessage(config('telegram.chanel_develop_id'), json_encode(['$$keyTelegram->children->toArray()'=>$keyTelegram->children->toArray()]), null);
+            $newArray = $this->changeInlineKeyboardsWithDataUSer($keyTelegram->children->toArray(), $chat_id);
+            $replyMarkup = $this->convertInlineKeyboards($newArray, $keyTelegram->chunk_children);
         }
         return $replyMarkup;
     }
@@ -275,7 +278,7 @@ class TelegramService
 
         $dataUser = $this->getUserData($data['chat_id'], $data['message']);
         $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
-        $replyMarkup = $this->generateMarkup($keyTelegram);
+        $replyMarkup = $this->generateMarkup($keyTelegram, $data['chat_id']);
 
 
         if($methodName == 'sendMessage'){
@@ -298,5 +301,43 @@ class TelegramService
         $str .= "\n 💲💲💲💲💲💲💲";
         return $str;
         
+    }
+
+    public function changeInlineKeyboardsWithDataUSer($array, $chatId)
+    {
+        $user= User::where('chat_id', $chatId)->first();
+        
+        $documents = Document::where('user_id', $user->id)->latest('id')->get();
+        foreach($array as $key => $row){
+            $str = '';
+            if($row['text'] == 'نام' && $user && $user->firstname){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'نام خانوادگی' && $user && $user->lastname){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'کد ملی' && $user && $user->national_code){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'تولد' && $user && $user->birth_date){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'احراز هویت' && $user && $user->authenticate_user){
+                $str = ' ✅ ';
+            }
+            
+            if($row['text'] == 'عکس کارت ملی' && $documents && $documents->where('type_file', 'کارت ملی')){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'فیلم سلفی' && $documents && $documents->where('type_file', 'ویدئو سلفی')){
+                $str = ' ✅ ';
+            }
+            if($row['text'] == 'کارت بانکی' && $documents && $documents->where('type_file', 'کارت بانکی')){
+                $str = ' ✅ ';
+            }
+            
+            $array[$key]['text'] = $row['text'] . $str;
+        }
+        return $array;
     }
 }

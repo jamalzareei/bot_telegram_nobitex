@@ -32,7 +32,7 @@ class UsersController extends Controller
             
             $dataUser = $this->telService->getUserData($data['chat_id'], $data['message']);
             $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
-            $replyMarkup = $this->telService->generateMarkup($keyTelegram);
+            $replyMarkup = $this->telService->generateMarkup($keyTelegram, $data['chat_id']);
             $this->telService->sendMessage($data['chat_id'], $text, $replyMarkup);
             die();return;
         }

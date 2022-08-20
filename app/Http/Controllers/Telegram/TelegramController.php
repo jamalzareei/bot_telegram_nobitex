@@ -84,7 +84,7 @@ class TelegramController extends Controller
         
 
         $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
-        $replyMarkup = $this->telService->generateMarkup($keyTelegram);
+        $replyMarkup = $this->telService->generateMarkup($keyTelegram, $chat_id);
 
         $this->telService->saveBot($data, $keyTelegram);
 
