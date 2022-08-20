@@ -79,6 +79,6 @@ class User extends Authenticatable
      */
     public function roles_telegram()
     {
-        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')->where('guard_name', 'telegram')->latest('role_id')->take(1);
+        return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')->where('type', 'telegram')->latest('role_id')->take(1);
     }
 }

@@ -32,7 +32,7 @@ class RoleController extends Controller
         $type = Role::create([
             'name' => request('name'),
             'details' => request('details'),
-            'guard_name'=> request('guard_name')
+            'type'=> request('type')
         ]);
 
         session()->put('noty', [
@@ -71,7 +71,7 @@ class RoleController extends Controller
         if($role){
             $role->name = request('name');
             $role->details = request('details');
-            $role->guard_name = request('guard_name');
+            $role->type = request('type');
             
             $role->save();
         }

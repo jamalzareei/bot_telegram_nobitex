@@ -61,6 +61,7 @@ Route::get('upload-image-natinal', [UserAuthenticationController::class, 'upload
 Route::get('upload-image-selfi', [UserAuthenticationController::class, 'uploadImageSelfi']);
 Route::get('upload-video-selfi', [UserAuthenticationController::class, 'uploadVideoSelfi']);
 Route::get('upload-card-bank', [UserAuthenticationController::class, 'uploadCardBank']);
+Route::get('send-data-for-authentication', [UserAuthenticationController::class, 'sendDataForAuthentication']);
 Route::get('auth-user-nextpay', [UserAuthenticationController::class, 'authUserNextpay']);
 
 Route::prefix('pay')->namespace('Pay')->group(function () {

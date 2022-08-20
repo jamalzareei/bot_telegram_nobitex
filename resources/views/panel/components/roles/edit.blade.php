@@ -29,12 +29,12 @@
                     </div>
                     
                     <div class="col-sm-12 data-field-col">
-                        <label for="guard_name">guarded</label>
-                        <select name="guard_name" class="form-control select2" id="guard_name">
-                            <option value="web" {{ $role->guard_name == 'web' ? 'selected' : ''}}>web</option>
-                            <option value="telegram" {{ $role->guard_name == 'telegram' ? 'selected' : ''}}>telegram</option>
+                        <label for="type">type</label>
+                        <select name="type" class="form-control select2" id="type">
+                            <option value="web" {{ $role->type == 'web' ? 'selected' : ''}}>web</option>
+                            <option value="telegram" {{ $role->type == 'telegram' ? 'selected' : ''}}>telegram</option>
                         </select>
-                        <small class="text-danger error-guard_name"></small>
+                        <small class="text-danger error-type"></small>
                     </div>
                 </div>
             </div>

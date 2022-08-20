@@ -88,6 +88,13 @@ class TelegramService
         return $res->json();
     }
     
+    public function sendVideo($chatId, $text, $photo, $reply_markup = null)
+    {
+        $text = urlencode($text);
+        $res = Http::get("https://api.telegram.org/bot" . config('telegram.token') . "/sendVideo?chat_id=$chatId&video=$photo&caption=$text&reply_markup=$reply_markup&parse_mode=html");
+        return $res->json();
+    }
+    
     public function sendMessageReply($chatId, $text, $reply_to_message_id, $reply_markup = null)
     {
         $text = urlencode($text);
@@ -165,6 +172,14 @@ class TelegramService
     {
         $user = User::where('chat_id', $chat_id)->where('login_telegram', 1)->with('accounts')->first();
         $listCredit_ = 'هنوز کارتی وارد نشده است'; $listShaba_ = 'هنوز شماره شبا وارد نشده است'; $listWalletStr = ''; $listWalletBalance = ''; $faqsList = '';
+
+        $kTelegram = KeyboradTelegram::orWhere('callback_data', $message)->orWhere('text', $message)->first();
+        if(!$kTelegram){
+            
+            $arrayAllCallback = KeyboradTelegram::pluck('callback_data')->toArray();
+            $botOld = Bot::where('chat_id', $chat_id)->whereIn('callback_data', $arrayAllCallback)->latest('id')->first();
+            $message = $botOld->callback_data;
+        }
 
         if($message == 'برداشت موجودی' || $message == 'مالی'){
             $listWallet = $user ? FinancialService::inventoryCalculation($user->id) : null;

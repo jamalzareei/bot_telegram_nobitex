@@ -7,6 +7,7 @@ use App\Models\User;
 use App\Services\SmsService;
 use App\Services\TelegramService;
 use Carbon\Carbon;
+use Illuminate\Support\Facades\DB;
 use Spatie\Permission\Models\Role;
 
 class UserController extends Controller
@@ -76,6 +77,10 @@ class UserController extends Controller
     public function rolesSync($id)
     {
         // return request()->all();
+        request()->validate([
+            'roles.*' => 'required|exists:roles,id',
+        ]);
+
         $user = User::find($id);
 
         $user->syncRoles(request('roles'));

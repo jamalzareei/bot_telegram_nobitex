@@ -116,10 +116,12 @@ class UsersController extends Controller
         $user = User::where('chat_id', $data['chat_id'])->first();
         $card = Account::where('user_id', $user->id)->where('number', $data['message'])->first();
         if($card){
-            $card->deleted_at = Carbon::now();
-            $card->actived_at = null;
-            $card->save();
-            $this->telService->sendMessageReply($data['chat_id'], 'کارت حذف گردید.', $data['message_id'], null);
+            // $card->deleted_at = Carbon::now();
+            // $card->actived_at = null;
+            // $card->save();
+            // $this->telService->sendMessageReply($data['chat_id'], 'کارت حذف گردید.', $data['message_id'], null);
+            
+            $this->telService->sendMessageReply($data['chat_id'], 'این شماره کارت قبلا ثبت شده است.', $data['message_id'], null);
         }else{
             $card = Account::updateOrCreate([
                 'user_id'=> $user->id,
@@ -133,7 +135,7 @@ class UsersController extends Controller
             $this->telService->sendMessageReply($data['chat_id'], 'کارت ثبت گردید.', $data['message_id'], null);
         }
         
-        $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
+        // $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
         
     }
 
@@ -150,11 +152,12 @@ class UsersController extends Controller
         $user = User::where('chat_id', $data['chat_id'])->first();
         $card = Account::where('user_id', $user->id)->where('number', $data['message'])->first();
         if($card){
-            $card->deleted_at = Carbon::now();
-            $card->actived_at = null;
-            $card->save();
+            // $card->deleted_at = Carbon::now();
+            // $card->actived_at = null;
+            // $card->save();
 
-            $this->telService->sendMessageReply($data['chat_id'], 'شبا حذف گردید.', $data['message_id'], null);
+            // $this->telService->sendMessageReply($data['chat_id'], 'شبا حذف گردید.', $data['message_id'], null);
+            $this->telService->sendMessageReply($data['chat_id'], 'این شماره شبا قبلا ثبت شده است.', $data['message_id'], null);
         }else{
             $card = Account::updateOrCreate([
                 'user_id'=> $user->id,
@@ -169,7 +172,7 @@ class UsersController extends Controller
             $this->telService->sendMessageReply($data['chat_id'], 'شبا ثبت گردید.', $data['message_id'], null);
         }
         
-        $this->telService->sendMessageFromControllers($data, 'لیست شبا');
+        // $this->telService->sendMessageFromControllers($data, 'لیست شبا');
     }
 
     public function confirmAccount()

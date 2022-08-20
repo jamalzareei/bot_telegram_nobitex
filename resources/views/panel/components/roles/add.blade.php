@@ -25,12 +25,12 @@
                         <small class="text-danger error-details"></small>
                     </div>
                     <div class="col-sm-12 data-field-col">
-                        <label for="guard_name">guarded</label>
-                        <select name="guard_name" class="form-control select2" id="guard_name">
+                        <label for="type">type</label>
+                        <select name="type" class="form-control select2" id="type">
                             <option value="web">web</option>
                             <option value="telegram">telegram</option>
                         </select>
-                        <small class="text-danger error-guard_name"></small>
+                        <small class="text-danger error-type"></small>
                     </div>
                 </div>
 

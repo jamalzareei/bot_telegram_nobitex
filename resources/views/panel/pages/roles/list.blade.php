@@ -42,6 +42,7 @@
                     <th></th>
                     <th>NAME</th>
                     <th>GUARD</th>
+                    <th>TYPE</th>
                     <th>DETAILS</th>
                     <th>ACTION</th>
                 </tr>
@@ -52,6 +53,7 @@
                         <td></td>
                         <td>{{ $role->name }}</td>
                         <td>{{ $role->guard_name }}</td>
+                        <td>{{ $role->TYPE }}</td>
                         <td>{{ $role->details }}</td>
                         <td class="product-action">
                             <span class="action-edit" onclick="editRow('{{ route('panel.roles.edit.role', ['id'=> $role->id]) }}')"><i class="feather icon-edit"></i></span>

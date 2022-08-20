@@ -27,12 +27,17 @@ class UserAuthenticationController extends Controller
         $message = $data['message'];
         $chat_id = $data['chat_id'];
 
+        $roleId = ($user && $user->roles_telegram && $user->roles_telegram[0] && $user->roles_telegram[0]->id) ? $user->roles_telegram[0]->id : null;
+        $roleName = ($user && $user->roles_telegram && $user->roles_telegram[0] && $user->roles_telegram[0]->name) ? $user->roles_telegram[0]->name : 'برنزی';
+        $setting = Setting::where('role_id', $roleId)->first();
         if ($user->authenticate_user) {
-            $roleId = ($user && $user->roles_telegram && $user->roles_telegram[0] && $user->roles_telegram[0]->id) ? $user->roles_telegram[0]->id : null;
-            $roleName = ($user && $user->roles_telegram && $user->roles_telegram[0] && $user->roles_telegram[0]->name) ? $user->roles_telegram[0]->name : null;
-            $setting = Setting::where('role_id', $roleId)->first();
 
             $this->telService->sendMessage($data['chat_id'], "حساب کاربری شما: $roleName \n\n" . $setting->details, null);
+            return '';
+        }else if($user->request_authenticate_user){
+            $text = "\n\n\n حساب کاربری شما: $roleName \n\n" . $setting->details. "\n\n\n ";
+            $text .= "حساب شما در مرحله بررسی میباشد.\n\n 💲💲💲💲💲💲💲💲💲💲";
+            $this->telService->sendMessage($data['chat_id'], $text, null);
             return '';
         } else {
             $dataUser = $this->telService->getUserData($chat_id, $message);
@@ -40,11 +45,13 @@ class UserAuthenticationController extends Controller
             $text = $keyTelegram ? (strtr($keyTelegram->details, $dataUser) ?? '') : '';
             $replyMarkup = $this->telService->generateMarkup($keyTelegram);
 
+            $text .= "\n\n\n حساب کاربری شما: $roleName \n\n" . $setting->details;
 
             if ($keyTelegram->file) {
                 return $this->telService->sendPhoto($chat_id, $text, $keyTelegram->file, $replyMarkup);
             }
             $this->telService->sendMessage($chat_id, $text, $replyMarkup);
+            return '';
         }
 
 
@@ -186,5 +193,29 @@ class UserAuthenticationController extends Controller
         $user = User::where('chat_id', $data['chat_id'])->first();
         return $this->telService->sendMessageReply($data['chat_id'], 'اطلاعات حساب شما تکمیل نمیباشد', $data['message_id'], null);
         // MainService::saveNotification($user->id, 1, '', '', 'تایید هویت کاربر', "کاربر با شماره $user->phone تایید هویت گردید.");
+    }
+
+    public function sendDataForAuthentication()
+    {
+        
+        $data = $this->telService->getDataTelegram();
+        $user = User::where('chat_id', $data['chat_id'])->first();
+        $user->request_authenticate_user = Carbon::now();
+        $user->save();
+
+
+        $documents = Document::where('user_id', $user->id)->get();
+        foreach ($documents as $doc){
+            if($doc->type_file == "ویدئو سلفی"){
+                $this->telService->sendVideo(config('telegram.chat_id_notification'), $this->detailsUser($user, str_replace(' ','_',$doc->type_file)), $doc->file_id_telegram, null);
+            }else{
+                $this->telService->sendPhoto(config('telegram.chat_id_notification'), $this->detailsUser($user, str_replace(' ','_',$doc->type_file)), $doc->file_id_telegram, null);
+            }
+        }
+        
+        // $this->telService->forwardMessage(config('telegram.chat_id_notification'), $data['chat_id'], $data['message_id']);
+        $this->telService->sendMessage(config('telegram.chat_id_notification'), $this->detailsUser($user, 'تایید_هویت_کاربر'), null);
+        
+        return $this->telService->sendMessageReply($data['chat_id'], "اطلاعات با موفقیت ارسال گردید.\n\n بزودی بررسی اطلاعات شما انجام خواهد گرفت", $data['message_id'], null);
     }
 }
