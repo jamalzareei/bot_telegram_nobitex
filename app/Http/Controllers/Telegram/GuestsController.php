@@ -98,6 +98,6 @@ class GuestsController extends Controller
 
         $this->telService->sendMessage($data['chat_id'], 'شما با موفقیت وارد حساب کاربری خود شدید.', null);
 
-        $this->telService->sendMessageFromControllers($data, 'پروفایل');
+        $this->telService->sendMessageFromControllers($data, 'حساب کاربری');
     }
 }

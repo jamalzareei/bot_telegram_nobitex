@@ -38,8 +38,8 @@ class TelegramService
         return json_encode([
             "keyboard" => array_chunk($arrayInlineKeyboards, $chunk_children),
             "resize_keyboard" => true,
-            "remove_keyboard"=> true,
-            'hide_keyboard' => true,
+            // "remove_keyboard"=> true,
+            // 'hide_keyboard' => true,
             "one_time_keyboard" => true,
             "input_field_placeholder" => " خرید و فروش ارز",
         ]);
@@ -305,8 +305,7 @@ class TelegramService
 
     public function changeInlineKeyboardsWithDataUSer($array, $chatId)
     {
-        $user= User::where('chat_id', $chatId)->first();
-        
+        $user= User::where('chat_id', $chatId)->with(['accounts', 'documents'])->first();
         $documents = Document::where('user_id', $user->id)->latest('id')->get();
         foreach($array as $key => $row){
             $str = '';
@@ -334,6 +333,24 @@ class TelegramService
             }
             if($row['text'] == 'کارت بانکی' && $documents && $documents->where('type_file', 'کارت بانکی')){
                 $str = ' ✅ ';
+            }
+
+            if($row['text'] == 'لیست کارت ها' && $documents && $documents->where('type_file', 'لیست کارت ها')){
+                
+                $filtered_collection = $user->accounts->filter(function ($item) { return (stripos($item, "IR") !== false) ? false : true; })->count();
+
+                $str = " ( ".($filtered_collection ?? 0)." ) ";
+            }
+            if($row['text'] == 'لیست شبا' && $documents && $documents->where('type_file', 'لیست شبا')){
+
+                $filtered_collection = $user->accounts->filter(function ($item) { return (stripos($item, "IR") !== false) ? true : false; })->count();
+
+                $str = " ( ".($filtered_collection ?? 0)." ) ";
+            }
+            if($row['text'] == 'مالی' && $documents && $documents->where('type_file', 'مالی')){
+
+                $filtered_collection = FinancialService::inventoryCalculation($user->id);
+                $str = " ( ".number_format($filtered_collection['balance'] ?? 0)." ) ";
             }
             
             $array[$key]['text'] = $row['text'] . $str;

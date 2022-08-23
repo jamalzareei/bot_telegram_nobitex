@@ -81,4 +81,14 @@ class User extends Authenticatable
     {
         return $this->belongsToMany(Role::class, 'model_has_roles', 'model_id', 'role_id')->where('type', 'telegram')->latest('role_id')->take(1);
     }
+
+    /**
+     * Get all of the documents for the User
+     *
+     * @return \Illuminate\Database\Eloquent\Relations\HasMany
+     */
+    public function documents()
+    {
+        return $this->hasMany(Document::class);
+    }
 }

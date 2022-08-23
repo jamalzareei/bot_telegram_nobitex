@@ -50,8 +50,10 @@ class UsersController extends Controller
 
             $user->firstname = $data['message'];
             $user->save();
-    
-            $this->telService->sendMessageFromControllers($data, 'پروفایل');
+                
+            $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+
+            return $this->telService->sendMessageReply($data['chat_id'], 'نام شما ثبت گردید.', $data['message_id'], $replyMarkup);
         }
     }
 
@@ -62,7 +64,10 @@ class UsersController extends Controller
         $user->lastname = $data['message'];
         $user->save();
 
-        $this->telService->sendMessageFromControllers($data, 'پروفایل');
+        // $this->telService->sendMessageFromControllers($data, 'حساب کاربری');
+        $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+
+        return $this->telService->sendMessageReply($data['chat_id'], 'اطلاعات شما ثبت گردید.', $data['message_id'], $replyMarkup);
     }
 
     public function changeNationalCode()
@@ -80,7 +85,10 @@ class UsersController extends Controller
         $user->national_code = $data['message'];
         $user->save();
 
-        $this->telService->sendMessageFromControllers($data, 'پروفایل');
+        // $this->telService->sendMessageFromControllers($data, 'حساب کاربری');
+        $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+
+        return $this->telService->sendMessageReply($data['chat_id'], 'اطلاعات شما ثبت گردید.', $data['message_id'], $replyMarkup);
     }
 
     public function changeBirthDay()
@@ -100,7 +108,10 @@ class UsersController extends Controller
         $user->birth_date = $timestamp; // $data['message'];
         $user->save();
 
-        $this->telService->sendMessageFromControllers($data, 'پروفایل');
+        // $this->telService->sendMessageFromControllers($data, 'حساب کاربری');
+        $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+
+        return $this->telService->sendMessageReply($data['chat_id'], 'اطلاعات شما ثبت گردید.', $data['message_id'], $replyMarkup);
     }
 
     public function updateCreditUser()
@@ -121,7 +132,7 @@ class UsersController extends Controller
             // $card->save();
             // $this->telService->sendMessageReply($data['chat_id'], 'کارت حذف گردید.', $data['message_id'], null);
             
-            $this->telService->sendMessageReply($data['chat_id'], 'این شماره کارت قبلا ثبت شده است.', $data['message_id'], null);
+            return $this->telService->sendMessageReply($data['chat_id'], 'این شماره کارت قبلا ثبت شده است.', $data['message_id'], null);
         }else{
             $card = Account::updateOrCreate([
                 'user_id'=> $user->id,
@@ -132,7 +143,10 @@ class UsersController extends Controller
             ]);
             
             MainService::saveNotification($user->id, 1, 'App\Models\Account', $card->id, 'ثبت کارت جدید', "کاربر با شماره $user->phone کارت جدیدی ثبت نمود.");
-            $this->telService->sendMessageReply($data['chat_id'], 'کارت ثبت گردید.', $data['message_id'], null);
+
+            $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+
+            return $this->telService->sendMessageReply($data['chat_id'], 'کارت ثبت گردید.', $data['message_id'], $replyMarkup);
         }
         
         // $this->telService->sendMessageFromControllers($data, 'لیست کارت ها');
@@ -169,7 +183,8 @@ class UsersController extends Controller
             
             MainService::saveNotification($user->id, 1, 'App\Models\Account', $card->id, 'ثبت شبا جدید', "کاربر با شماره $user->phone شبا جدیدی ثبت نمود.");
             
-            $this->telService->sendMessageReply($data['chat_id'], 'شبا ثبت گردید.', $data['message_id'], null);
+            $replyMarkup = $this->telService->convertInlineKeyboards([['text'=>'حساب کاربری', 'callback_data'=> 'حساب کاربری']], 1);
+            $this->telService->sendMessageReply($data['chat_id'], 'شبا ثبت گردید.', $data['message_id'], $replyMarkup);
         }
         
         // $this->telService->sendMessageFromControllers($data, 'لیست شبا');
