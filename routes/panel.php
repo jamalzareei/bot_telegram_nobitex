@@ -1,6 +1,9 @@
 <?php
 
+use App\Http\Controllers\Panel\AccountsController;
 use App\Http\Controllers\Panel\FaqsController;
+use App\Http\Controllers\Panel\PaysController;
+use App\Http\Controllers\Panel\RequestsController;
 use App\Http\Controllers\Panel\RoleController;
 use App\Http\Controllers\Panel\SettingsController;
 use App\Http\Controllers\Panel\StatusesController;
@@ -59,6 +62,13 @@ Route::group(['middleware' => ['role:super-admin']], function () {
     Route::get('/roles/edit', [RoleController::class, 'edit'])->name('panel.roles.edit.role');
     Route::post('/roles/update', [RoleController::class, 'update'])->name('panel.roles.update.role');
     
+    Route::get('/accounts-list', [AccountsController::class, 'list'])->name('panel.accounts.list');
+
+    Route::get('/requests-list', [RequestsController::class, 'list'])->name('panel.requests.list');
+    Route::post('/request-active/{id}', [RequestsController::class, 'requestActive'])->name('panel.request.active');
+
+    
+    Route::get('/pay-list', [PaysController::class, 'list'])->name('panel.pay.list');
 });
 
 Route::group(['middleware' => ['role:admin']], function () {

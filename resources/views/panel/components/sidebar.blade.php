@@ -58,6 +58,7 @@
                     <span class="menu-title" data-i18n="Email">تنظیمات</span>
                 </a>
             </li>
+
             <li class=" navigation-header"><span>Telegram</span>
             </li>
             <li class=" nav-item">
@@ -88,6 +89,29 @@
                 </a>
             </li>
             
+            
+            <li class=" navigation-header"><span>مالی</span>
+            </li>
+            <li class=" nav-item">
+                <a href="{{ route('panel.accounts.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">حساب های کاربران</span>
+                </a>
+            </li>
+            
+            <li class=" nav-item">
+                <a href="{{ route('panel.requests.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">درخواست های کاربران</span>
+                </a>
+            </li>
+            <li class=" nav-item">
+                <a href="{{ route('panel.pay.list') }}">
+                    <i class="feather icon-mail"></i>
+                    <span class="menu-title" data-i18n="Email">پرداخت های کاربران</span>
+                </a>
+            </li>
+
         </ul>
     </div>
 </div>
