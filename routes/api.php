@@ -5,6 +5,7 @@ use App\Http\Controllers\API\NobitexAPIController;
 use App\Http\Controllers\Pay\NextpayController;
 use App\Http\Controllers\Telegram\FinancialController;
 use App\Http\Controllers\Telegram\GuestsController;
+use App\Http\Controllers\Telegram\NobitexController;
 use App\Http\Controllers\Telegram\SettingsController;
 use App\Http\Controllers\Telegram\UserAuthenticationController;
 use App\Http\Controllers\Telegram\UsersController;
@@ -67,4 +68,9 @@ Route::get('auth-user-nextpay', [UserAuthenticationController::class, 'authUserN
 Route::prefix('pay')->namespace('Pay')->group(function () {
     Route::get('pay-nextpay/{model}/{id}/{type_request?}', [NextpayController::class, 'pay'])->name('pay.nextpay');
     Route::get('callback-nextpay/{pay_id}/{type_request?}', [NextpayController::class, 'callback'])->name('callback.nextpay');
+});
+
+Route::prefix('nobitex')->group(function () {
+    Route::get('generate-token', [NobitexController::class, 'generateToken'])->name('nobitex.generate.token');
+    Route::get('list-price', [NobitexController::class, 'listPrice'])->name('nobitex.generate.token');
 });
