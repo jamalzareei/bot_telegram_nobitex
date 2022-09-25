@@ -26,7 +26,12 @@ class Admin
             // return abort(403);
             return redirect()->route('login');
         }
+        
+        if(auth()->user()->roles->where('name', 'super-admin')->first()){
+            return $next($request);
+        }
+        
+        return abort(403);
 
-        return $next($request);
     }
 }

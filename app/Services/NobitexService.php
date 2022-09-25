@@ -45,8 +45,46 @@ class NobitexService
         $res = Http::get('https://dapi.p3p.repl.co/api/?currency=usd');
         return $res->json()['Price'] ?? '';
     }
-
     public function getPrice()
+    {
+        $dollar = $this->getPriceDollar();
+        $res = Http::withHeaders([
+            'Content-Type' => 'application/json'
+        ])
+            ->get('https://api.nobitex.ir/market/stats?srcCurrency=btc&dstCurrency=rls', []);
+
+        $str = "آخرین قیمت های بازار \n" . verta()->format('l Y/n/j H:i') . "\n\n\n";
+        if (!($res && $res->json())) {
+            return $str;
+        }
+        $list = $res->json();
+        // return $list['global']['binance'];
+        $arr = ['btc', 'eth', 'bnb', 'ada', 'xrp', 'one', 'dot', 'sol', 'avax', 'vtho', 'usdt'];
+        $result = array_filter(
+            $list['global']['binance'],
+            function ($key) use ($arr) {
+                return in_array($key, $arr);
+            },
+            ARRAY_FILTER_USE_KEY
+        );
+
+
+        $row = 0;
+        // return $result;
+        foreach ($result ?? [] as $key => $value) {
+                $str .= "💲 " . $key . " : " . $value . " دلار ";
+                $str .= "\n"; // "\n";
+                $str .= "🟢 قیمت خرید : " . ($value * ($dollar + 5000)) . " ريال ";
+                $str .= "\n"; // "\n";
+                $str .= "🔴 قیمت فروش : " . ($value * ($dollar - 5000)) . " ريال ";
+                $str .= "\n\n\n"; // "\n";
+            $row++;
+        }
+        // echo $str;return ;
+        return ($str);
+    }
+
+    public function getPriceV2()
     {
         $dollar = $this->getPriceDollar();
         $res = Http::withHeaders([
@@ -54,28 +92,29 @@ class NobitexService
         ])
             ->post('https://api.nobitex.ir/market/global-stats', []);
 
-        $str = '';
+        $str = "آخرین قیمت های بازار \n" . verta()->format('l Y/n/j H:i') . "\n\n\n";
         if (!($res && $res->json())) {
             return $str;
         }
         $list = $res->json();
-        
+        // return $list;
+        $row = 0;
         foreach ($list as $key => $value) {
-            if ($key == 'markets') {
-                // return $value['binance'];
+            if ($key == 'markets') { // && $row <= 10
                 foreach ($value['binance'] as $key2 => $value2) {
-                    # code...
-                    $value2 = 19955;
-                    $str .= $key2. " : " . $value2;
-                    $str .= "<br />";// "\n";
-                    $str .= "قیمت خرید : " . $value2 * ($dollar + 5000) . " ريال ";
-                    $str .= "<br />";// "\n";
-                    $str .= "قیمت فروش : " . $value2 * ($dollar - 5000) . " ريال ";
-                    $str .= "<br /><br /><br />";// "\n";
+                    if ($row <= 10) {
+                        $str .= "💲 " . $key2 . " : " . $value2 . " دلار ";
+                        $str .= "\n"; // "\n";
+                        $str .= "🟢 قیمت خرید : " . ($value2 * ($dollar + 5000)) . " ريال ";
+                        $str .= "\n"; // "\n";
+                        $str .= "🔴 قیمت فروش : " . ($value2 * ($dollar - 5000)) . " ريال ";
+                        $str .= "\n\n\n"; // "\n";
+                    }
+                    $row++;
                 }
             }
         }
-        echo $str;return ;
+        // echo $str;return ;
         return $str;
     }
 }

@@ -224,7 +224,7 @@ class TelegramService
         $data = request();
         $result = [];
         $result['message'] = $data['message']['text'] ?? $data['callback_query']['data'] ?? 'NOT';
-        $result['chat_id'] = $data['message']['chat']['id'] ?? $data['callback_query']['message']['chat']['id'] ?? config('telegram.bot_id');
+        $result['chat_id'] = $data['message']['chat']['id'] ?? $data['callback_query']['message']['chat']['id'] ?? '';
         $result['from_id'] = $data['message']['from']['id'] ?? $data['callback_query']['message']['from']['id'] ?? '0';
         $result['firstname'] = $data['message']['chat']['first_name'] ?? $data['callback_query']['message']['chat']['first_name'] ?? '';
         $result['lastname'] = $data['message']['chat']['last_name'] ?? $data['callback_query']['message']['chat']['last_name'] ?? '';
